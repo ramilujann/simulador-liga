@@ -87,30 +87,30 @@
         }
     </style>
 </head>
-<body class="p-4 md:p-6">
+<body class="p-2 sm:p-4 md:p-6">
 
     <div class="max-w-7xl mx-auto">
-        <header class="text-center mb-8">
-            <h1 class="text-3xl md:text-4xl font-bold text-slate-800">Simulador de Playoffs - Liga Profesional</h1>
-            <p class="text-slate-600 mt-2">Ingresa los resultados de las fechas restantes y observa cómo se actualizan las tablas y los cruces de playoffs en tiempo real.</p>
+        <header class="text-center mb-6 md:mb-8">
+            <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-800">Simulador de Playoffs - Liga Profesional</h1>
+            <p class="text-sm sm:text-base text-slate-600 mt-2">Ingresa los resultados y mira cómo se actualizan las tablas y cruces.</p>
         </header>
 
-        <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 md:gap-8">
             <!-- Columna de Fixture -->
             <div class="xl:col-span-1">
-                <div id="matches-container" class="bg-white p-4 rounded-lg shadow-md sticky top-6">
-                    <h2 class="text-xl font-bold text-slate-700 mb-4 text-center">Fixture Restante</h2>
+                <div id="matches-container" class="bg-white p-3 sm:p-4 rounded-lg shadow-md xl:sticky top-6">
+                    <h2 class="text-lg sm:text-xl font-bold text-slate-700 mb-4 text-center">Fixture Restante</h2>
                     <!-- El contenido se generará con JS -->
                 </div>
             </div>
 
             <!-- Columna de Tablas y Playoffs -->
-            <div class="xl:col-span-2 space-y-8">
+            <div class="xl:col-span-2 space-y-6 md:space-y-8">
                 
                 <!-- Controles -->
                 <div class="bg-white p-4 rounded-lg shadow-md flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-8">
                     <div class="flex items-center space-x-3">
-                        <span class="text-sm font-medium text-slate-700">Mostrar solo equipos con chances</span>
+                        <span class="text-sm font-medium text-slate-700 text-center">Mostrar solo equipos con chances</span>
                         <label class="toggle-label">
                             <input type="checkbox" id="toggle-chances" onchange="renderTables()">
                             <span class="slider"></span>
@@ -127,8 +127,8 @@
 
                 <!-- Zonas -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-white p-4 rounded-lg shadow-md">
-                        <h3 class="text-lg font-bold text-center mb-3 text-white bg-[#05664F] py-2 rounded-t-md">Clausura - Zona A</h3>
+                    <div class="bg-white p-3 sm:p-4 rounded-lg shadow-md">
+                        <h3 class="text-base sm:text-lg font-bold text-center mb-3 text-white bg-[#05664F] py-2 rounded-t-md">Clausura - Zona A</h3>
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm text-left">
                                 <thead class="table-header-a">
@@ -140,8 +140,8 @@
                             </table>
                         </div>
                     </div>
-                    <div class="bg-white p-4 rounded-lg shadow-md">
-                        <h3 class="text-lg font-bold text-center mb-3 text-white bg-[#4C3A7A] py-2 rounded-t-md">Clausura - Zona B</h3>
+                    <div class="bg-white p-3 sm:p-4 rounded-lg shadow-md">
+                        <h3 class="text-base sm:text-lg font-bold text-center mb-3 text-white bg-[#4C3A7A] py-2 rounded-t-md">Clausura - Zona B</h3>
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm text-left">
                                 <thead class="table-header-b">
@@ -156,16 +156,16 @@
                 </div>
 
                 <!-- Cruces de Playoffs -->
-                <div class="bg-white p-4 rounded-lg shadow-md">
-                    <h3 class="text-lg font-bold text-slate-700 mb-4 text-center">Cruces de Playoffs (en tiempo real)</h3>
+                <div class="bg-white p-3 sm:p-4 rounded-lg shadow-md">
+                    <h3 class="text-base sm:text-lg font-bold text-slate-700 mb-4 text-center">Cruces de Playoffs (en tiempo real)</h3>
                     <div id="playoffs-container" class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-sm">
                         <!-- Generado por JS -->
                     </div>
                 </div>
 
                 <!-- Tabla Anual (Oculta por defecto) -->
-                <div id="anual-container" class="bg-white p-4 rounded-lg shadow-md hidden">
-                    <h3 class="text-lg font-bold text-slate-700 mb-3 text-center">Tabla Anual</h3>
+                <div id="anual-container" class="bg-white p-3 sm:p-4 rounded-lg shadow-md hidden">
+                    <h3 class="text-base sm:text-lg font-bold text-slate-700 mb-3 text-center">Tabla Anual</h3>
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm text-left">
                             <thead class="bg-slate-700 text-white">
@@ -229,6 +229,7 @@ const teamLogos = { 'Boca Juniors': 'https://www.promiedos.com.ar/images/12.png'
 let initialRemainingMatches = [
     // Fecha 12 (Pendiente)
     { fecha: 12, local: 'Barracas Central', visitante: 'Boca Juniors', status: 'Aplazado' },
+    { fecha: 12, local: 'Platense', visitante: 'Riestra', status: 'Aplazado' },
     // Fecha 13
     { fecha: 13, local: 'Racing Club', visitante: 'Aldosivi' },
     { fecha: 13, local: 'Lanús', visitante: 'Godoy Cruz' },
@@ -301,49 +302,6 @@ document.addEventListener('DOMContentLoaded', () => {
     renderMatches();
     renderTables();
 });
-
-function calculateTables() {
-    const calculatedData = JSON.parse(JSON.stringify(initialTeamsData));
-    const partidosJugadosExtra = {};
-
-    Object.values(matchResults).forEach(match => {
-        if (match.localScore === null || match.visitorScore === null) return;
-        
-        const local = calculatedData[match.local];
-        const visitor = calculatedData[match.visitante];
-        const localScore = match.localScore;
-        const visitorScore = match.visitorScore;
-
-        if (!partidosJugadosExtra[match.local]) partidosJugadosExtra[match.local] = 0;
-        if (!partidosJugadosExtra[match.visitante]) partidosJugadosExtra[match.visitante] = 0;
-        
-        if (match.isNew) {
-            local.clausura.j++; visitor.clausura.j++;
-            local.anual.j++; visitor.anual.j++;
-            partidosJugadosExtra[match.local]++;
-            partidosJugadosExtra[match.visitante]++;
-            match.isNew = false; // Marcar como ya contado
-        }
-
-        // Se recalculan los puntos y goles desde cero en cada llamada
-        local.clausura.gf += localScore; visitor.clausura.gf += visitorScore;
-        local.clausura.gc += visitorScore; visitor.clausura.gc += localScore;
-        local.anual.gf += localScore; visitor.anual.gf += visitorScore;
-        local.anual.gc += visitorScore; visitor.anual.gc += localScore;
-
-        if (localScore > visitorScore) { 
-            local.clausura.pts += 3; local.anual.pts += 3;
-        } else if (visitorScore > localScore) { 
-            visitor.clausura.pts += 3; visitor.anual.pts += 3;
-        } else { 
-            local.clausura.pts += 1; visitor.clausura.pts += 1;
-            local.anual.pts += 1; visitor.anual.pts += 1;
-        }
-    });
-
-    return { calculatedData, partidosJugadosExtra };
-}
-
 
 function renderTables() {
     // Reset data on each render to avoid cumulative calculations
