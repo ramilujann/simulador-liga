@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de la Liga Profesional</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .table-header-a { background-color: #05664F; color: white; }
+        .table-header-b { background-color: #4C3A7A; color: white; }
+        .boca-row { background-color: #fefce8 !important; font-weight: 700; }
+        
+        /* Clasificación a copas */
+        .clasi-libertadores-directo { border-left: 4px solid #1e40af; }
+        .clasi-libertadores-repechaje { border-left: 4px solid #3b82f6; }
+        .clasi-sudamericana { border-left: 4px solid #ea580c; }
+        .playoff-spot { border-left: 4px solid #16a34a; }
+        
+        .input-score {
+            width: 45px; text-align: center; border: 1px solid #cbd5e1;
+            border-radius: 0.375rem; padding: 2px 4px; font-weight: 500;
+        }
+        .input-score:focus {
+            outline: none; border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.4);
+        }
+        .team-logo { width: 24px; height: 24px; object-fit: contain; }
+        
+        /* Estilo para equipos eliminados */
+        .eliminated {
+            opacity: 0.5;
+            text-decoration: line-through;
+            pointer-events: none;
+        }
+        .eliminated-row {
+            background-color: #e5e7eb !important;
+            color: #9ca3af;
+        }
+        .eliminated-row .team-logo {
+             filter: grayscale(100%);
+        }
+
+        /* Toggle Switch */
+        .toggle-label {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        .toggle-label input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2563eb;
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-6">
+
+    <div class="max-w-7xl mx-auto">
+        <header class="text-center mb-8">
+            <h1 class="text-3xl md:text-4xl font-bold text-slate-800">Simulador de Playoffs - Liga Profesional</h1>
+            <p class="text-slate-600 mt-2">Ingresa los resultados de las fechas restantes y observa cómo se actualizan las tablas y los cruces de playoffs en tiempo real.</p>
+        </header>
+
+        <div class="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            <!-- Columna de Fixture -->
+            <div class="xl:col-span-1">
+                <div id="matches-container" class="bg-white p-4 rounded-lg shadow-md sticky top-6">
+                    <h2 class="text-xl font-bold text-slate-700 mb-4 text-center">Fixture Restante</h2>
+                    <!-- El contenido se generará con JS -->
+                </div>
+            </div>
+
+            <!-- Columna de Tablas y Playoffs -->
+            <div class="xl:col-span-2 space-y-8">
+                
+                <!-- Controles -->
+                <div class="bg-white p-4 rounded-lg shadow-md flex flex-col sm:flex-row justify-center items-center gap-4 sm:gap-8">
+                    <div class="flex items-center space-x-3">
+                        <span class="text-sm font-medium text-slate-700">Mostrar solo equipos con chances</span>
+                        <label class="toggle-label">
+                            <input type="checkbox" id="toggle-chances" onchange="renderTables()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    <div class="flex items-center space-x-3">
+                        <span class="text-sm font-medium text-slate-700">Mostrar Tabla Anual</span>
+                        <label class="toggle-label">
+                            <input type="checkbox" id="toggle-anual" onchange="toggleAnualTable()">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Zonas -->
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    <div class="bg-white p-4 rounded-lg shadow-md">
+                        <h3 class="text-lg font-bold text-center mb-3 text-white bg-[#05664F] py-2 rounded-t-md">Clausura - Zona A</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="table-header-a">
+                                    <tr>
+                                        <th class="p-2">#</th><th class="p-2">Equipo</th><th class="p-2">Pts</th><th class="p-2">PJ</th><th class="p-2">+/-</th><th class="p-2">Máx</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-clausura-a"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow-md">
+                        <h3 class="text-lg font-bold text-center mb-3 text-white bg-[#4C3A7A] py-2 rounded-t-md">Clausura - Zona B</h3>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead class="table-header-b">
+                                     <tr>
+                                        <th class="p-2">#</th><th class="p-2">Equipo</th><th class="p-2">Pts</th><th class="p-2">PJ</th><th class="p-2">+/-</th><th class="p-2">Máx</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-clausura-b"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Cruces de Playoffs -->
+                <div class="bg-white p-4 rounded-lg shadow-md">
+                    <h3 class="text-lg font-bold text-slate-700 mb-4 text-center">Cruces de Playoffs (en tiempo real)</h3>
+                    <div id="playoffs-container" class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 text-sm">
+                        <!-- Generado por JS -->
+                    </div>
+                </div>
+
+                <!-- Tabla Anual (Oculta por defecto) -->
+                <div id="anual-container" class="bg-white p-4 rounded-lg shadow-md hidden">
+                    <h3 class="text-lg font-bold text-slate-700 mb-3 text-center">Tabla Anual</h3>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left">
+                            <thead class="bg-slate-700 text-white">
+                                <tr>
+                                    <th class="p-2">#</th><th class="p-2">Equipo</th><th class="p-2">Pts</th><th class="p-2">PJ</th><th class="p-2">+/-</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-anual"></tbody>
+                        </table>
+                    </div>
+                     <div class="mt-4 text-xs text-slate-500 space-y-1">
+                        <p><span class="inline-block w-3 h-3 rounded-full bg-[#1e40af] mr-2"></span>Libertadores (Fase de Grupos)</p>
+                        <p><span class="inline-block w-3 h-3 rounded-full bg-[#3b82f6] mr-2"></span>Libertadores (Repechaje)</p>
+                        <p><span class="inline-block w-3 h-3 rounded-full bg-[#ea580c] mr-2"></span>Sudamericana</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<script>
+// DATOS INICIALES BASADOS EN LAS CAPTURAS
+let initialTeamsData = {
+    // Zona A
+    'Defensa y Justicia': { group: 'A', clausura: { pts: 19, j: 12, gf: 13, gc: 10 }, anual: { pts: 38, j: 28, gf: 31, gc: 32 } },
+    'Central Córdoba (SdE)': { group: 'A', clausura: { pts: 18, j: 12, gf: 15, gc: 10 }, anual: { pts: 36, j: 28, gf: 36, gc: 32 } },
+    'Estudiantes (LP)': { group: 'A', clausura: { pts: 18, j: 12, gf: 13, gc: 13 }, anual: { pts: 39, j: 28, gf: 31, gc: 32 } },
+    'Boca Juniors': { group: 'A', clausura: { pts: 17, j: 11, gf: 18, gc: 8 }, anual: { pts: 50, j: 27, gf: 42, gc: 19 } },
+    'Unión': { group: 'A', clausura: { pts: 17, j: 12, gf: 16, gc: 12 }, anual: { pts: 31, j: 28, gf: 27, gc: 30 } },
+    'Barracas Central': { group: 'A', clausura: { pts: 17, j: 11, gf: 13, gc: 11 }, anual: { pts: 43, j: 27, gf: 33, gc: 29 } },
+    'Tigre': { group: 'A', clausura: { pts: 17, j: 12, gf: 11, gc: 9 }, anual: { pts: 44, j: 28, gf: 29, gc: 21 } },
+    'Huracán': { group: 'A', clausura: { pts: 16, j: 12, gf: 6, gc: 10 }, anual: { pts: 43, j: 28, gf: 25, gc: 22 } },
+    'Argentinos Juniors': { group: 'A', clausura: { pts: 15, j: 12, gf: 13, gc: 9 }, anual: { pts: 48, j: 28, gf: 36, gc: 18 } },
+    'Belgrano': { group: 'A', clausura: { pts: 15, j: 12, gf: 11, gc: 11 }, anual: { pts: 32, j: 28, gf: 24, gc: 32 } },
+    'Racing Club': { group: 'A', clausura: { pts: 15, j: 12, gf: 13, gc: 13 }, anual: { pts: 43, j: 28, gf: 39, gc: 29 } },
+    'Ind. Rivadavia': { group: 'A', clausura: { pts: 12, j: 12, gf: 10, gc: 12 }, anual: { pts: 39, j: 28, gf: 30, gc: 29 } },
+    'Newell\'s': { group: 'A', clausura: { pts: 11, j: 12, gf: 8, gc: 10 }, anual: { pts: 30, j: 28, gf: 22, gc: 33 } },
+    'Aldosivi': { group: 'A', clausura: { pts: 9, j: 12, gf: 5, gc: 14 }, anual: { pts: 24, j: 28, gf: 23, gc: 42 } },
+    'Banfield': { group: 'A', clausura: { pts: 14, j: 12, gf: 10, gc: 17 }, anual: { pts: 28, j: 28, gf: 24, gc: 36 } },
+
+    // Zona B
+    'Riestra': { group: 'B', clausura: { pts: 23, j: 11, gf: 16, gc: 8 }, anual: { pts: 47, j: 27, gf: 29, gc: 15 } },
+    'Lanús': { group: 'B', clausura: { pts: 23, j: 12, gf: 13, gc: 9 }, anual: { pts: 43, j: 28, gf: 26, gc: 20 } },
+    'Vélez Sarsfield': { group: 'B', clausura: { pts: 22, j: 12, gf: 17, gc: 9 }, anual: { pts: 36, j: 28, gf: 24, gc: 31 } },
+    'Rosario Central': { group: 'B', clausura: { pts: 21, j: 11, gf: 13, gc: 6 }, anual: { pts: 56, j: 27, gf: 35, gc: 14 } },
+    'River Plate': { group: 'B', clausura: { pts: 18, j: 12, gf: 18, gc: 12 }, anual: { pts: 49, j: 28, gf: 39, gc: 21 } },
+    'San Lorenzo': { group: 'B', clausura: { pts: 16, j: 12, gf: 9, gc: 9 }, anual: { pts: 43, j: 28, gf: 23, gc: 19 } },
+    'Atlético Tucumán': { group: 'B', clausura: { pts: 15, j: 12, gf: 13, gc: 13 }, anual: { pts: 30, j: 28, gf: 30, gc: 34 } },
+    'Sarmiento (J)': { group: 'B', clausura: { pts: 15, j: 11, gf: 9, gc: 11 }, anual: { pts: 30, j: 27, gf: 20, gc: 30 } },
+    'Instituto': { group: 'B', clausura: { pts: 15, j: 12, gf: 7, gc: 11 }, anual: { pts: 33, j: 28, gf: 23, gc: 31 } },
+    'San Martín (SJ)': { group: 'B', clausura: { pts: 14, j: 12, gf: 9, gc: 11 }, anual: { pts: 23, j: 28, gf: 14, gc: 29 } },
+    'Talleres (C)': { group: 'B', clausura: { pts: 14, j: 12, gf: 7, gc: 10 }, anual: { pts: 27, j: 28, gf: 18, gc: 25 } },
+    'Gimnasia (LP)': { group: 'B', clausura: { pts: 13, j: 12, gf: 8, gc: 14 }, anual: { pts: 29, j: 28, gf: 17, gc: 32 } },
+    'Platense': { group: 'B', clausura: { pts: 10, j: 10, gf: 10, gc: 15 }, anual: { pts: 33, j: 26, gf: 23, gc: 26 } },
+    'Godoy Cruz': { group: 'B', clausura: { pts: 10, j: 12, gf: 9, gc: 14 }, anual: { pts: 27, j: 28, gf: 17, gc: 32 } },
+    'Independiente': { group: 'B', clausura: { pts: 6, j: 11, gf: 6, gc: 12 }, anual: { pts: 35, j: 27, gf: 29, gc: 24 } }
+};
+
+const teamLogos = { 'Boca Juniors': 'https://www.promiedos.com.ar/images/12.png', 'River Plate': 'https://www.promiedos.com.ar/images/1.png', 'Racing Club': 'https://www.promiedos.com.ar/images/15.png', 'Independiente': 'https://www.promiedos.com.ar/images/10.png', 'San Lorenzo': 'https://www.promiedos.com.ar/images/17.png', 'Vélez Sarsfield': 'https://www.promiedos.com.ar/images/2.png', 'Estudiantes (LP)': 'https://www.promiedos.com.ar/images/8.png', 'Rosario Central': 'https://www.promiedos.com.ar/images/16.png', 'Lanús': 'https://www.promiedos.com.ar/images/11.png', 'Huracán': 'https://www.promiedos.com.ar/images/21.png', 'Argentinos Juniors': 'https://www.promiedos.com.ar/images/3.png', 'Tigre': 'https://www.promiedos.com.ar/images/28.png', 'Platense': 'https://www.promiedos.com.ar/images/29.png', 'Defensa y Justicia': 'https://www.promiedos.com.ar/images/107.png', 'Sarmiento (J)': 'https://www.promiedos.com.ar/images/84.png', 'Unión': 'https://www.promiedos.com.ar/images/19.png', 'Central Córdoba (SdE)': 'https://www.promiedos.com.ar/images/207.png', 'Barracas Central': 'https://www.promiedos.com.ar/images/183.png', 'Instituto': 'https://www.promiedos.com.ar/images/23.png', 'Belgrano': 'https://www.promiedos.com.ar/images/22.png', 'Ind. Rivadavia': 'https://www.promiedos.com.ar/images/79.png', 'Riestra': 'https://www.promiedos.com.ar/images/232.png', 'Talleres (C)': 'https://www.promiedos.com.ar/images/25.png', 'San Martín (SJ)': 'https://www.promiedos.com.ar/images/57.png', 'Newell\'s': 'https://www.promiedos.com.ar/images/14.png', 'Aldosivi': 'https://www.promiedos.com.ar/images/99.png', 'Banfield': 'https://www.promiedos.com.ar/images/4.png', 'Atlético Tucumán': 'https://www.promiedos.com.ar/images/33.png', 'Gimnasia (LP)': 'https://www.promiedos.com.ar/images/9.png', 'Godoy Cruz': 'https://www.promiedos.com.ar/images/101.png' };
+
+let initialRemainingMatches = [
+    // Fecha 12 (Pendiente)
+    { fecha: 12, local: 'Barracas Central', visitante: 'Boca Juniors', status: 'Aplazado' },
+    // Fecha 13
+    { fecha: 13, local: 'Racing Club', visitante: 'Aldosivi' },
+    { fecha: 13, local: 'Lanús', visitante: 'Godoy Cruz' },
+    { fecha: 13, local: 'Argentinos Juniors', visitante: 'Newell\'s' },
+    { fecha: 13, local: 'Ind. Rivadavia', visitante: 'Banfield' },
+    { fecha: 13, local: 'Boca Juniors', visitante: 'Belgrano' },
+    { fecha: 13, local: 'Talleres (C)', visitante: 'River Plate' },
+    { fecha: 13, local: 'Estudiantes (LP)', visitante: 'Gimnasia (LP)' },
+    { fecha: 13, local: 'Sarmiento (J)', visitante: 'Vélez Sarsfield' },
+    { fecha: 13, local: 'San Martín (SJ)', visitante: 'Independiente' },
+    { fecha: 13, local: 'Rosario Central', visitante: 'Platense' },
+    { fecha: 13, local: 'Riestra', visitante: 'Instituto' },
+    { fecha: 13, local: 'Tigre', visitante: 'Barracas Central' },
+    { fecha: 13, local: 'Atlético Tucumán', visitante: 'San Lorenzo' },
+    { fecha: 13, local: 'Unión', visitante: 'Defensa y Justicia' },
+    { fecha: 13, local: 'Huracán', visitante: 'Central Córdoba (SdE)' },
+    // Fecha 14
+    { fecha: 14, local: 'Banfield', visitante: 'Lanús' },
+    { fecha: 14, local: 'Vélez Sarsfield', visitante: 'Talleres (C)' },
+    { fecha: 14, local: 'River Plate', visitante: 'Gimnasia (LP)' },
+    { fecha: 14, local: 'Platense', visitante: 'Sarmiento (J)' },
+    { fecha: 14, local: 'Instituto', visitante: 'Rosario Central' },
+    { fecha: 14, local: 'San Lorenzo', visitante: 'Riestra' },
+    { fecha: 14, local: 'Independiente', visitante: 'Atlético Tucumán' },
+    { fecha: 14, local: 'Godoy Cruz', visitante: 'San Martín (SJ)' },
+    { fecha: 14, local: 'Estudiantes (LP)', visitante: 'Boca Juniors' },
+    { fecha: 14, local: 'Belgrano', visitante: 'Tigre' },
+    { fecha: 14, local: 'Barracas Central', visitante: 'Argentinos Juniors' },
+    { fecha: 14, local: 'Newell\'s', visitante: 'Unión' },
+    { fecha: 14, local: 'Defensa y Justicia', visitante: 'Huracán' },
+    { fecha: 14, local: 'Central Córdoba (SdE)', visitante: 'Racing Club' },
+    { fecha: 14, local: 'Aldosivi', visitante: 'Ind. Rivadavia' },
+    // Fecha 15
+    { fecha: 15, local: 'Boca Juniors', visitante: 'River Plate' },
+    { fecha: 15, local: 'Atlético Tucumán', visitante: 'Godoy Cruz' },
+    { fecha: 15, local: 'San Martín (SJ)', visitante: 'Lanús' },
+    { fecha: 15, local: 'Rosario Central', visitante: 'San Lorenzo' },
+    { fecha: 15, local: 'Riestra', visitante: 'Independiente' },
+    { fecha: 15, local: 'Sarmiento (J)', visitante: 'Instituto' },
+    { fecha: 15, local: 'Talleres (C)', visitante: 'Platense' },
+    { fecha: 15, local: 'Gimnasia (LP)', visitante: 'Vélez Sarsfield' },
+    { fecha: 15, local: 'Banfield', visitante: 'Aldosivi' },
+    { fecha: 15, local: 'Ind. Rivadavia', visitante: 'Central Córdoba (SdE)' },
+    { fecha: 15, local: 'Huracán', visitante: 'Newell\'s' },
+    { fecha: 15, local: 'Racing Club', visitante: 'Defensa y Justicia' },
+    { fecha: 15, local: 'Unión', visitante: 'Barracas Central' },
+    { fecha: 15, local: 'Argentinos Juniors', visitante: 'Belgrano' },
+    { fecha: 15, local: 'Tigre', visitante: 'Estudiantes (LP)' },
+    // Fecha 16
+    { fecha: 16, local: 'Vélez Sarsfield', visitante: 'River Plate' },
+    { fecha: 16, local: 'Platense', visitante: 'Gimnasia (LP)' },
+    { fecha: 16, local: 'San Lorenzo', visitante: 'Sarmiento (J)' },
+    { fecha: 16, local: 'Aldosivi', visitante: 'San Martín (SJ)' },
+    { fecha: 16, local: 'Instituto', visitante: 'Talleres (C)' },
+    { fecha: 16, local: 'Independiente', visitante: 'Rosario Central' },
+    { fecha: 16, local: 'Godoy Cruz', visitante: 'Riestra' },
+    { fecha: 16, local: 'Lanús', visitante: 'Atlético Tucumán' },
+    { fecha: 16, local: 'Boca Juniors', visitante: 'Tigre' },
+    { fecha: 16, local: 'Belgrano', visitante: 'Unión' },
+    { fecha: 16, local: 'Barracas Central', visitante: 'Huracán' },
+    { fecha: 16, local: 'Estudiantes (LP)', visitante: 'Argentinos Juniors' },
+    { fecha: 16, local: 'Newell\'s', visitante: 'Racing Club' },
+    { fecha: 16, local: 'Defensa y Justicia', visitante: 'Ind. Rivadavia' },
+    { fecha: 16, local: 'Central Córdoba (SdE)', visitante: 'Banfield' },
+];
+
+let matchResults = {};
+
+document.addEventListener('DOMContentLoaded', () => {
+    renderMatches();
+    renderTables();
+});
+
+function calculateTables() {
+    const calculatedData = JSON.parse(JSON.stringify(initialTeamsData));
+    const partidosJugadosExtra = {};
+
+    Object.values(matchResults).forEach(match => {
+        if (match.localScore === null || match.visitorScore === null) return;
+        
+        const local = calculatedData[match.local];
+        const visitor = calculatedData[match.visitante];
+        const localScore = match.localScore;
+        const visitorScore = match.visitorScore;
+
+        if (!partidosJugadosExtra[match.local]) partidosJugadosExtra[match.local] = 0;
+        if (!partidosJugadosExtra[match.visitante]) partidosJugadosExtra[match.visitante] = 0;
+        
+        if (match.isNew) {
+            local.clausura.j++; visitor.clausura.j++;
+            local.anual.j++; visitor.anual.j++;
+            partidosJugadosExtra[match.local]++;
+            partidosJugadosExtra[match.visitante]++;
+            match.isNew = false; // Marcar como ya contado
+        }
+
+        // Se recalculan los puntos y goles desde cero en cada llamada
+        local.clausura.gf += localScore; visitor.clausura.gf += visitorScore;
+        local.clausura.gc += visitorScore; visitor.clausura.gc += localScore;
+        local.anual.gf += localScore; visitor.anual.gf += visitorScore;
+        local.anual.gc += visitorScore; visitor.anual.gc += localScore;
+
+        if (localScore > visitorScore) { 
+            local.clausura.pts += 3; local.anual.pts += 3;
+        } else if (visitorScore > localScore) { 
+            visitor.clausura.pts += 3; visitor.anual.pts += 3;
+        } else { 
+            local.clausura.pts += 1; visitor.clausura.pts += 1;
+            local.anual.pts += 1; visitor.anual.pts += 1;
+        }
+    });
+
+    return { calculatedData, partidosJugadosExtra };
+}
+
+
+function renderTables() {
+    // Reset data on each render to avoid cumulative calculations
+    let currentData = JSON.parse(JSON.stringify(initialTeamsData));
+
+    for (const matchId in matchResults) {
+        const match = matchResults[matchId];
+        if (match.localScore === null || match.visitorScore === null) continue;
+
+        const local = currentData[match.local];
+        const visitor = currentData[match.visitante];
+        
+        local.clausura.j++; visitor.clausura.j++;
+        local.anual.j++; visitor.anual.j++;
+        
+        local.clausura.gf += match.localScore; visitor.clausura.gf += match.visitorScore;
+        local.clausura.gc += match.visitorScore; visitor.clausura.gc += match.localScore;
+        local.anual.gf += match.localScore; visitor.anual.gf += match.visitorScore;
+        local.anual.gc += match.visitorScore; visitor.anual.gc += match.localScore;
+
+        if (match.localScore > match.visitorScore) {
+            local.clausura.pts += 3; local.anual.pts += 3;
+        } else if (match.visitorScore > match.localScore) {
+            visitor.clausura.pts += 3; visitor.anual.pts += 3;
+        } else {
+            local.clausura.pts += 1; visitor.clausura.pts += 1;
+            local.anual.pts += 1; visitor.anual.pts += 1;
+        }
+    }
+
+    const allTeamsArray = Object.entries(currentData).map(([name, data]) => ({ name, ...data }));
+    
+    let groupA = allTeamsArray.filter(t => t.group === 'A').map(t => ({name: t.name, ...t.clausura, group: t.group}));
+    let groupB = allTeamsArray.filter(t => t.group === 'B').map(t => ({name: t.name, ...t.clausura, group: t.group}));
+    
+    const sortTable = (teams) => teams.sort((a, b) => {
+        if (b.pts !== a.pts) return b.pts - a.pts;
+        const diffA = a.gf - a.gc; const diffB = b.gf - b.gc;
+        if (diffB !== diffA) return diffB - diffA;
+        if (b.gf !== a.gf) return b.gf - a.gf;
+        return a.name.localeCompare(b.name);
+    });
+
+    let sortedA = sortTable(groupA);
+    let sortedB = sortTable(groupB);
+
+    const umbralA = sortedA.length > 7 ? sortedA[7].pts : 0;
+    const umbralB = sortedB.length > 7 ? sortedB[7].pts : 0;
+
+    const showOnlyWithChances = document.getElementById('toggle-chances').checked;
+
+    const generateRowHTML = (team, index, umbral) => {
+        const partidosRestantes = 16 - team.j;
+        const maxPts = team.pts + (partidosRestantes * 3);
+        const hasChances = maxPts >= umbral;
+        
+        if (showOnlyWithChances && !hasChances) return '';
+
+        return `
+        <tr class="${team.name === 'Boca Juniors' ? 'boca-row' : 'odd:bg-slate-50'} ${index < 8 ? 'playoff-spot' : ''} ${!hasChances ? 'eliminated-row' : ''}">
+            <td class="p-2 font-medium">${index + 1}</td>
+            <td class="p-2 flex items-center gap-2"><img src="${teamLogos[team.name] || ''}" class="team-logo" alt="logo">${team.name}</td>
+            <td class="p-2 font-semibold">${team.pts}</td><td class="p-2">${team.j}</td><td class="p-2">${team.gf - team.gc}</td>
+            <td class="p-2 ${hasChances ? 'text-green-600' : 'text-red-600'} font-medium">${maxPts}</td>
+        </tr>`;
+    };
+
+    document.getElementById('table-clausura-a').innerHTML = sortedA.map((t, i) => generateRowHTML(t, i, umbralA)).join('');
+    document.getElementById('table-clausura-b').innerHTML = sortedB.map((t, i) => generateRowHTML(t, i, umbralB)).join('');
+    
+    // Tabla Anual
+    const anualTableData = allTeamsArray.map(t => ({name: t.name, ...t.anual}));
+    const sortedAnual = sortTable(anualTableData);
+    document.getElementById('table-anual').innerHTML = sortedAnual.map((t, i) => `
+        <tr class="${t.name === 'Boca Juniors' ? 'boca-row' : 'odd:bg-slate-50'} ${i < 2 ? 'clasi-libertadores-directo' : ''} ${i === 2 ? 'clasi-libertadores-repechaje' : ''} ${i >= 3 && i < 9 ? 'clasi-sudamericana' : ''}">
+            <td class="p-2 font-medium">${i + 1}</td>
+            <td class="p-2 flex items-center gap-2"><img src="${teamLogos[t.name] || ''}" class="team-logo" alt="logo">${t.name}</td>
+            <td class="p-2 font-semibold">${t.pts}</td><td class="p-2">${t.j}</td><td class="p-2">${t.gf - t.gc}</td>
+        </tr>`).join('');
+
+    renderPlayoffs(sortedA, sortedB);
+}
+
+function renderPlayoffs(sortedA, sortedB) {
+    const playoffsContainer = document.getElementById('playoffs-container');
+    playoffsContainer.innerHTML = '';
+    const matchups = [
+        { a: 0, b: 7 }, { a: 1, b: 6 }, { a: 2, b: 5 }, { a: 3, b: 4 },
+        { b: 0, a: 7 }, { b: 1, a: 6 }, { b: 2, a: 5 }, { b: 3, a: 4 }
+    ];
+    matchups.forEach(match => {
+        const teamA = sortedA.length > match.a ? sortedA[match.a] : { name: '?', logo: '' };
+        const teamB = sortedB.length > match.b ? sortedB[match.b] : { name: '?', logo: '' };
+        
+        const homeKey = 'a' in match ? 'a' : 'b';
+        const teamHome = homeKey === 'a' ? teamA : teamB;
+        const teamAway = homeKey === 'a' ? teamB : teamA;
+
+        playoffsContainer.innerHTML += `
+        <div class="flex items-center justify-between bg-slate-50 p-3 rounded-md border">
+            <div class="flex items-center gap-3 w-2/5 font-bold">
+                <img src="${teamLogos[teamHome.name] || ''}" class="team-logo" alt="logo">
+                <span>${teamHome.name}</span>
+            </div>
+            <span class="text-slate-400 font-bold text-xs">vs</span>
+            <div class="flex items-center justify-end gap-3 w-2/5">
+                <span>${teamAway.name}</span>
+                <img src="${teamLogos[teamAway.name] || ''}" class="team-logo" alt="logo">
+            </div>
+        </div>`;
+    });
+}
+
+function handleScoreChange(matchId, side, value) {
+    if (!matchResults[matchId]) {
+        const originalMatch = initialRemainingMatches.find(m => m.id === matchId);
+        matchResults[matchId] = { 
+            local: originalMatch.local, 
+            visitante: originalMatch.visitante, 
+            localScore: null, 
+            visitorScore: null 
+        };
+    }
+    const score = value === '' ? null : parseInt(value);
+    if (side === 'local') { 
+        matchResults[matchId].localScore = score; 
+    } else { 
+        matchResults[matchId].visitorScore = score; 
+    }
+    renderTables();
+}
+
+function renderMatches() {
+    const container = document.getElementById('matches-container');
+    container.innerHTML = '';
+    const matchesByFecha = initialRemainingMatches.reduce((acc, match, index) => {
+        match.id = index;
+        const key = `Fecha ${match.fecha}`;
+        if (!acc[key]) acc[key] = [];
+        acc[key].push(match);
+        return acc;
+    }, {});
+    container.innerHTML += Object.entries(matchesByFecha).map(([fecha, matches]) => `
+        <div class="mb-5">
+            <h4 class="font-semibold text-md text-slate-600 border-b pb-2 mb-3">${fecha} ${matches[0].status ? `(${matches[0].status})` : ''}</h4>
+            <div class="space-y-3">
+            ${matches.map(match => `
+                <div class="grid grid-cols-[1fr,auto,1fr] gap-2 items-center text-sm">
+                    <span class="text-right flex items-center justify-end gap-2">${match.local} <img src="${teamLogos[match.local] || ''}" class="team-logo" alt="logo"></span>
+                    <div class="flex items-center gap-1">
+                        <input type="number" min="0" class="input-score" id="local-${match.id}" oninput="handleScoreChange(${match.id}, 'local', this.value)">
+                        <span>-</span>
+                        <input type="number" min="0" class="input-score" id="visitor-${match.id}" oninput="handleScoreChange(${match.id}, 'visitor', this.value)">
+                    </div>
+                    <span class="text-left flex items-center gap-2"><img src="${teamLogos[match.visitante] || ''}" class="team-logo" alt="logo"> ${match.visitante}</span>
+                </div>`).join('')}
+            </div>
+        </div>`).join('');
+}
+
+function toggleAnualTable() {
+    const anualContainer = document.getElementById('anual-container');
+    anualContainer.classList.toggle('hidden');
+}
+</script>
+</body>
+</html>
+
