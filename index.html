@@ -49,41 +49,38 @@
         input:checked + .slider:before { transform: translateX(20px); }
 
         /* Estilos del Bracket de Playoffs */
-        .bracket-container {
-            background-color: #1f2937; /* Fondo oscuro */
-            padding: 2rem 1rem;
-            border-radius: 0.5rem;
-            overflow-x: auto;
-        }
         .bracket {
             display: flex;
-            justify-content: center;
+            overflow-x: auto;
+            padding: 20px;
+            background-color: #e2e8f0; /* Fondo gris claro para el bracket */
+            border-radius: 0.5rem;
         }
         .round {
             display: flex;
             flex-direction: column;
             justify-content: space-around;
-            width: 180px;
-            min-width: 180px;
+            flex-basis: 200px;
+            flex-shrink: 0;
         }
         .round-title {
             text-align: center;
             font-weight: 600;
-            color: #d1d5db;
-            margin-bottom: 2rem;
-            font-size: 0.8rem;
-            text-transform: uppercase;
+            color: #475569;
+            margin-bottom: 20px;
         }
         .matchup {
-            position: relative;
-            margin-bottom: 2rem; /* Espacio entre matchups */
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex-grow: 1;
         }
-        .matchup-content {
-            background-color: #374151;
-            border: 1px solid #4b5563;
+        .match-item {
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
             border-radius: 0.375rem;
-            padding: 0.5rem;
-            color: #f3f4f6;
+            padding: 8px;
+            margin: 5px 0;
         }
         .team {
             display: flex;
@@ -91,70 +88,66 @@
             font-size: 0.8rem;
         }
         .team img {
-            margin-right: 0.5rem;
+            margin-right: 8px;
         }
         .team-pos {
-            font-size: 0.65rem;
-            font-weight: bold;
-            color: #9ca3af;
-            margin-left: auto;
+             margin-left: auto;
+             font-size: 0.7rem;
+             color: #64748b;
+             font-weight: 600;
         }
         .placeholder-match {
-            background-color: #374151;
-            border: 1px dashed #6b7280;
-            color: #9ca3af;
-            height: 60px; /* Misma altura que un matchup */
+            background-color: #f1f5f9;
+            border: 1px dashed #94a3b8;
             border-radius: 0.375rem;
+            padding: 8px;
+            margin: 5px 0;
+            height: 62px;
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 0.8rem;
+            color: #64748b;
         }
-        .connector-wrapper {
+        .connector {
             display: flex;
             flex-direction: column;
             justify-content: space-around;
-            width: 40px; /* Espacio para conectores */
+            width: 30px;
         }
-        .connector {
+        .connector-line {
             position: relative;
-            height: 100%;
-            width: 100%;
+            flex-grow: 1;
         }
-        .connector::before, .connector::after {
+        .connector-line::before {
             content: '';
             position: absolute;
-            background-color: #4ade80; /* Verde */
-        }
-        .connector.from-two::before { /* Línea horizontal */
-            width: 100%;
+            width: 50%;
             height: 2px;
+            background: #94a3b8;
             top: 50%;
-            left: 0;
+            transform: translateY(-50%);
         }
-        .connector.from-two::after { /* Línea vertical */
+        .connector-line::after {
+            content: '';
+            position: absolute;
             width: 2px;
-            height: 100%;
-            top: 0;
+            background: #94a3b8;
         }
-        .connector-wrapper.left .connector.from-two::after {
-            left: 0;
+
+        /* Conectores que van de 2 a 1 */
+        .connector-2-to-1::after {
+            height: 50%;
+            top: 25%;
         }
-        .connector-wrapper.right .connector.from-two::after {
-            right: 0;
-        }
-        .connector.from-one::before { /* Línea horizontal simple */
-            width: 100%;
-            height: 2px;
-            top: 50%;
-            left: 0;
-        }
-        .final-column {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 0 1rem;
+        .left .connector-2-to-1::before { left: 0; }
+        .left .connector-2-to-1::after { right: 0; }
+        .right .connector-2-to-1::before { right: 0; }
+        .right .connector-2-to-1::after { left: 0; }
+
+        /* Conectores que van de 1 a 1 */
+        .connector-1-to-1::before {
+             width: 100%;
         }
     </style>
 </head>
@@ -237,8 +230,8 @@
                 </div>
 
                 <!-- Cruces de Playoffs -->
-                <div class="bracket-container">
-                    <h3 class="text-base sm:text-lg font-bold text-gray-200 mb-6 text-center">CUADRO DE PLAYOFFS</h3>
+                <div class="bg-white p-3 sm:p-4 rounded-lg shadow-md">
+                    <h3 class="text-base sm:text-lg font-bold text-slate-700 mb-4 text-center">Cuadro de Playoffs</h3>
                     <div id="playoffs-container">
                         <!-- Generado por JS -->
                     </div>
@@ -460,51 +453,64 @@ function renderPlayoffs(sortedA, sortedB) {
     const playoffsContainer = document.getElementById('playoffs-container');
     const bracketHTML = `
         <div class="bracket">
+            <!-- OCTAVOS -->
             <div class="round">
-                <div class="round-title">Octavos de Final</div>
+                <div class="round-title">8vos de Final</div>
                 ${generateMatchupHTML(sortedA[0], sortedB[7], '1°A', '8°B')}
                 ${generateMatchupHTML(sortedA[3], sortedB[4], '4°A', '5°B')}
                 ${generateMatchupHTML(sortedA[1], sortedB[6], '2°A', '7°B')}
                 ${generateMatchupHTML(sortedA[2], sortedB[5], '3°A', '6°B')}
             </div>
-            <div class="round flex flex-col justify-around">
-                <div class="connector"><div class="connector-path"><div class="connector-line line-h"></div><div class="connector-line line-v connector-left" style="height: 100%; top: -50%;"></div></div></div>
-                <div class="connector"><div class="connector-path"><div class="connector-line line-h"></div><div class="connector-line line-v connector-left" style="height: 100%; top: -50%;"></div></div></div>
+            <!-- CONECTORES Y CUARTOS -->
+            <div class="connector left">
+                <div class="connector-line connector-2-to-1"></div>
+                <div class="connector-line connector-2-to-1"></div>
             </div>
             <div class="round">
-                <div class="round-title">Cuartos de Final</div>
-                ${generateMatchupHTML(null, null, null, null, 'A definir')}
-                ${generateMatchupHTML(null, null, null, null, 'A definir')}
+                <div class="round-title">4tos de Final</div>
+                <div class="matchup"><div class="placeholder-match">A definir</div></div>
+                <div class="matchup"><div class="placeholder-match">A definir</div></div>
             </div>
-            <div class="round flex flex-col justify-around">
-                 <div class="connector"><div class="connector-path"><div class="connector-line line-h"></div><div class="connector-line line-v connector-left" style="height: 200%; top: -150%;"></div></div></div>
-            </div>
-            <div class="round">
-                <div class="round-title">Semifinales</div>
-                ${generateMatchupHTML(null, null, null, null, 'A definir')}
-            </div>
-            <div class="trophy-container">
-                 <svg class="w-12 h-12 text-yellow-500" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M15.848 3.22a.75.75 0 01.458 1.319l-2.458 1.077a.75.75 0 01-.916-.217l-.058-.081a3.002 3.002 0 00-4.752 0l-.058.081a.75.75 0 01-.916.217L4.704 4.54a.75.75 0 01.458-1.319l2.458-1.077a.75.75 0 01.916.217l.058.081a3.002 3.002 0 004.752 0l.058-.081a.75.75 0 01.916-.217l2.458 1.077zM10 6a2.25 2.25 0 00-2.25 2.25c0 1.052.73 1.933 1.712 2.182a.75.75 0 01.538.705v.99a.75.75 0 001.5 0v-.99a.75.75 0 01.538-.705C12.98 10.183 13.75 9.302 13.75 8.25A2.25 2.25 0 0011.5 6H10zM3.818 6.182a.75.75 0 01-.342 1.012L2.25 7.75v5.5A2.25 2.25 0 004.5 15.5h11a2.25 2.25 0 002.25-2.25v-5.5l-1.226-.556a.75.75 0 01-.342-1.012l.506-.877a.75.75 0 011.264.73l-.506.877a2.25 2.25 0 01-1.026 3.036l.001.001v5.25a3.75 3.75 0 01-3.75 3.75H8.25a3.75 3.75 0 01-3.75-3.75v-5.25l.001-.001a2.25 2.25 0 01-1.026-3.036l-.506-.877a.75.75 0 011.264-.73l.506.877z" clip-rule="evenodd"></path></svg>
-                <div class="round-title mt-2">FINAL</div>
+            <!-- CONECTORES Y SEMIS -->
+            <div class="connector left">
+                <div class="connector-line connector-2-to-1"></div>
             </div>
             <div class="round">
                 <div class="round-title">Semifinales</div>
-                ${generateMatchupHTML(null, null, null, null, 'A definir')}
+                <div class="matchup"><div class="placeholder-match">A definir</div></div>
             </div>
-            <div class="round flex flex-col justify-around">
-                 <div class="connector"><div class="connector-path"><div class="connector-line line-h"></div><div class="connector-line line-v connector-right" style="height: 200%; top: -150%;"></div></div></div>
-            </div>
-            <div class="round">
-                <div class="round-title">Cuartos de Final</div>
-                ${generateMatchupHTML(null, null, null, null, 'A definir')}
-                ${generateMatchupHTML(null, null, null, null, 'A definir')}
-            </div>
-            <div class="round flex flex-col justify-around">
-                <div class="connector"><div class="connector-path"><div class="connector-line line-h"></div><div class="connector-line line-v connector-right" style="height: 100%; top: -50%;"></div></div></div>
-                <div class="connector"><div class="connector-path"><div class="connector-line line-h"></div><div class="connector-line line-v connector-right" style="height: 100%; top: -50%;"></div></div></div>
+            <!-- FINAL -->
+            <div class="connector">
+                <div class="connector-line connector-1-to-1"></div>
             </div>
             <div class="round">
-                <div class="round-title">Octavos de Final</div>
+                 <div class="round-title">Final</div>
+                <div class="matchup"><div class="placeholder-match">A definir</div></div>
+            </div>
+            <div class="connector">
+                <div class="connector-line connector-1-to-1"></div>
+            </div>
+            <!-- CONECTORES Y SEMIS -->
+             <div class="round">
+                <div class="round-title">Semifinales</div>
+                <div class="matchup"><div class="placeholder-match">A definir</div></div>
+            </div>
+            <div class="connector right">
+                <div class="connector-line connector-2-to-1"></div>
+            </div>
+            <!-- CUARTOS -->
+            <div class="round">
+                <div class="round-title">4tos de Final</div>
+                <div class="matchup"><div class="placeholder-match">A definir</div></div>
+                <div class="matchup"><div class="placeholder-match">A definir</div></div>
+            </div>
+            <!-- CONECTORES Y OCTAVOS -->
+            <div class="connector right">
+                <div class="connector-line connector-2-to-1"></div>
+                <div class="connector-line connector-2-to-1"></div>
+            </div>
+            <div class="round">
+                <div class="round-title">8vos de Final</div>
                 ${generateMatchupHTML(sortedB[0], sortedA[7], '1°B', '8°A')}
                 ${generateMatchupHTML(sortedB[3], sortedA[4], '4°B', '5°A')}
                 ${generateMatchupHTML(sortedB[1], sortedA[6], '2°B', '7°A')}
@@ -515,23 +521,28 @@ function renderPlayoffs(sortedA, sortedB) {
     playoffsContainer.innerHTML = bracketHTML;
 }
 
-function generateMatchupHTML(team1, team2, title1, title2, placeholder) {
-    if (placeholder) {
-        return `<div class="matchup-pair"><div class="matchup"><div class="placeholder-match">${placeholder}</div></div></div>`;
-    }
-    const t1 = team1 || { name: '?', logo: '' };
-    const t2 = team2 || { name: '?', logo: '' };
+function generateMatchupHTML(team1, team2, pos1, pos2) {
+    const t1 = team1 || { name: 'A definir' };
+    const t2 = team2 || { name: 'A definir' };
     return `
         <div class="matchup">
-            <div class="matchup-title">${title1} vs ${title2}</div>
-            <div class="matchup-content">
-                <div class="team"><img src="${teamLogos[t1.name] || ''}" class="team-logo"><span>${t1.name}</span></div>
-                <hr class="my-1">
-                <div class="team"><img src="${teamLogos[t2.name] || ''}" class="team-logo"><span>${t2.name}</span></div>
+            <div class="match-item">
+                <div class="team">
+                    <img src="${teamLogos[t1.name] || ''}" class="team-logo">
+                    <span>${t1.name}</span>
+                    <span class="team-pos">${pos1 || ''}</span>
+                </div>
+                <hr class="my-1 border-slate-200">
+                <div class="team">
+                    <img src="${teamLogos[t2.name] || ''}" class="team-logo">
+                    <span>${t2.name}</span>
+                    <span class="team-pos">${pos2 || ''}</span>
+                </div>
             </div>
         </div>
     `;
 }
+
 
 function handleScoreChange(matchId, side, value) {
     if (!matchResults[matchId]) {
