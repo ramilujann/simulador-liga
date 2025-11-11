@@ -49,12 +49,20 @@
         input:checked + .slider:before { transform: translateX(20px); }
 
         /* Estilos del Bracket de Playoffs */
+        .bracket-viewport {
+            width: 100%;
+            overflow-x: hidden;      /* sin barrita horizontal */
+            display: flex;
+            justify-content: center; /* centra el contenido */
+        }
         .bracket {
             display: flex;
-            overflow-x: auto;
+            overflow-x: visible; 
             padding: 20px;
             background-color: #e2e8f0; /* Fondo gris claro para el bracket */
             border-radius: 0.5rem;
+            direction: ltr;          /* asegura orden izq→der */
+            transform-origin: top center;
         }
         .round {
             display: flex;
@@ -374,6 +382,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     renderMatches();
     renderTables();
+    
+    // Agregar el listener para reescalar en resize
+    window.addEventListener('resize', fitBracket);
 });
 
 function renderTables() {
@@ -452,74 +463,78 @@ function renderTables() {
     renderPlayoffs(sortedA, sortedB);
     // Añadimos el event listener después de renderizar el bracket
     addBracketListeners();
+    // Llamar a fitBracket después de que todo se haya renderizado
+    fitBracket();
 }
 
 function renderPlayoffs(sortedA, sortedB) {
     const playoffsContainer = document.getElementById('playoffs-container');
     const bracketHTML = `
-        <div class="bracket">
-            <!-- OCTAVOS -->
-            <div class="round">
-                <div class="round-title">8vos de Final</div>
-                ${generateMatchupHTML(sortedA[0], sortedB[7], '1°A', '8°B', 'r16-1')}
-                ${generateMatchupHTML(sortedA[3], sortedB[4], '4°A', '5°B', 'r16-2')}
-                ${generateMatchupHTML(sortedA[1], sortedB[6], '2°A', '7°B', 'r16-3')}
-                ${generateMatchupHTML(sortedA[2], sortedB[5], '3°A', '6°B', 'r16-4')}
-            </div>
-            <!-- CONECTORES Y CUARTOS -->
-            <div class="connector left">
-                <div class="connector-line connector-2-to-1"></div>
-                <div class="connector-line connector-2-to-1"></div>
-            </div>
-            <div class="round">
-                <div class="round-title">4tos de Final</div>
-                ${generateMatchupHTML(null, null, null, null, 'r8-1')}
-                ${generateMatchupHTML(null, null, null, null, 'r8-2')}
-            </div>
-            <!-- CONECTORES Y SEMIS -->
-            <div class="connector left">
-                <div class="connector-line connector-2-to-1"></div>
-            </div>
-            <div class="round">
-                <div class="round-title">Semifinales</div>
-                ${generateMatchupHTML(null, null, null, null, 'r4-1')}
-            </div>
-            <!-- FINAL -->
-            <div class="connector">
-                <div class="connector-line connector-1-to-1"></div>
-            </div>
-            <div class="round">
-                 <div class="round-title">Final</div>
-                ${generateMatchupHTML(null, null, null, null, 'r2-1')}
-            </div>
-            <div class="connector">
-                <div class="connector-line connector-1-to-1"></div>
-            </div>
-            <!-- CONECTORES Y SEMIS -->
-             <div class="round">
-                <div class="round-title">Semifinales</div>
-                ${generateMatchupHTML(null, null, null, null, 'r4-2')}
-            </div>
-            <div class="connector right">
-                <div class="connector-line connector-2-to-1"></div>
-            </div>
-            <!-- CUARTOS -->
-            <div class="round">
-                <div class="round-title">4tos de Final</div>
-                ${generateMatchupHTML(null, null, null, null, 'r8-3')}
-                ${generateMatchupHTML(null, null, null, null, 'r8-4')}
-            </div>
-            <!-- CONECTORES Y OCTAVOS -->
-            <div class="connector right">
-                <div class="connector-line connector-2-to-1"></div>
-                <div class="connector-line connector-2-to-1"></div>
-            </div>
-            <div class="round">
-                <div class="round-title">8vos de Final</div>
-                ${generateMatchupHTML(sortedB[0], sortedA[7], '1°B', '8°A', 'r16-5')}
-                ${generateMatchupHTML(sortedB[3], sortedA[4], '4°B', '5°A', 'r16-6')}
-                ${generateMatchupHTML(sortedB[1], sortedA[6], '2°B', '7°A', 'r16-7')}
-                ${generateMatchupHTML(sortedB[2], sortedA[5], '3°B', '6°A', 'r16-8')}
+        <div class="bracket-viewport"> 
+            <div class="bracket">
+                <!-- OCTAVOS -->
+                <div class="round">
+                    <div class="round-title">8vos de Final</div>
+                    ${generateMatchupHTML(sortedA[0], sortedB[7], '1°A', '8°B', 'r16-1')}
+                    ${generateMatchupHTML(sortedA[3], sortedB[4], '4°A', '5°B', 'r16-2')}
+                    ${generateMatchupHTML(sortedA[1], sortedB[6], '2°A', '7°B', 'r16-3')}
+                    ${generateMatchupHTML(sortedA[2], sortedB[5], '3°A', '6°B', 'r16-4')}
+                </div>
+                <!-- CONECTORES Y CUARTOS -->
+                <div class="connector left">
+                    <div class="connector-line connector-2-to-1"></div>
+                    <div class="connector-line connector-2-to-1"></div>
+                </div>
+                <div class="round">
+                    <div class="round-title">4tos de Final</div>
+                    ${generateMatchupHTML(null, null, null, null, 'r8-1')}
+                    ${generateMatchupHTML(null, null, null, null, 'r8-2')}
+                </div>
+                <!-- CONECTORES Y SEMIS -->
+                <div class="connector left">
+                    <div class="connector-line connector-2-to-1"></div>
+                </div>
+                <div class="round">
+                    <div class="round-title">Semifinales</div>
+                    ${generateMatchupHTML(null, null, null, null, 'r4-1')}
+                </div>
+                <!-- FINAL -->
+                <div class="connector">
+                    <div class="connector-line connector-1-to-1"></div>
+                </div>
+                <div class="round">
+                     <div class="round-title">Final</div>
+                    ${generateMatchupHTML(null, null, null, null, 'r2-1')}
+                </div>
+                <div class="connector">
+                    <div class="connector-line connector-1-to-1"></div>
+                </div>
+                <!-- CONECTORES Y SEMIS -->
+                 <div class="round">
+                    <div class="round-title">Semifinales</div>
+                    ${generateMatchupHTML(null, null, null, null, 'r4-2')}
+                </div>
+                <div class="connector right">
+                    <div class="connector-line connector-2-to-1"></div>
+                </div>
+                <!-- CUARTOS -->
+                <div class="round">
+                    <div class="round-title">4tos de Final</div>
+                    ${generateMatchupHTML(null, null, null, null, 'r8-3')}
+                    ${generateMatchupHTML(null, null, null, null, 'r8-4')}
+                </div>
+                <!-- CONECTORES Y OCTAVOS -->
+                <div class="connector right">
+                    <div class="connector-line connector-2-to-1"></div>
+                    <div class="connector-line connector-2-to-1"></div>
+                </div>
+                <div class="round">
+                    <div class="round-title">8vos de Final</div>
+                    ${generateMatchupHTML(sortedB[0], sortedA[7], '1°B', '8°A', 'r16-5')}
+                    ${generateMatchupHTML(sortedB[3], sortedA[4], '4°B', '5°A', 'r16-6')}
+                    ${generateMatchupHTML(sortedB[1], sortedA[6], '2°B', '7°A', 'r16-7')}
+                    ${generateMatchupHTML(sortedB[2], sortedA[5], '3°B', '6°A', 'r16-8')}
+                </div>
             </div>
         </div>
     `;
@@ -635,6 +650,17 @@ function resetResults() {
 
     // Re-render the tables to show the initial state
     renderTables();
+}
+
+/* Escalado responsivo sin modificar nada interno */
+function fitBracket(){
+  const vp = document.querySelector('.bracket-viewport');
+  if (!vp) return;
+  const el = vp.querySelector('.bracket');
+  if (!el) return;
+
+  const scale = Math.min(1, vp.clientWidth / el.scrollWidth);
+  el.style.transform = `scale(${scale})`;
 }
 
 // --- NUEVA FUNCIONALIDAD DE CLIC EN BRACKET ---
