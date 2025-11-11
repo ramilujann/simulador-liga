@@ -261,98 +261,79 @@
     </div>
 
 <script>
-// DATOS INICIALES BASADOS EN LAS CAPTURAS
+// DATOS INICIALES BASADOS EN LAS CAPTURAS (ACTUALIZADOS POST FECHA 15)
 let initialTeamsData = {
     // Zona A
-    'Defensa y Justicia': { group: 'A', clausura: { pts: 19, j: 12, gf: 13, gc: 10 }, anual: { pts: 38, j: 28, gf: 31, gc: 32 } },
-    'Central Córdoba (SdE)': { group: 'A', clausura: { pts: 18, j: 12, gf: 15, gc: 10 }, anual: { pts: 36, j: 28, gf: 36, gc: 32 } },
-    'Estudiantes (LP)': { group: 'A', clausura: { pts: 18, j: 12, gf: 13, gc: 13 }, anual: { pts: 39, j: 28, gf: 31, gc: 32 } },
-    'Boca Juniors': { group: 'A', clausura: { pts: 17, j: 11, gf: 18, gc: 8 }, anual: { pts: 50, j: 27, gf: 42, gc: 19 } },
-    'Unión': { group: 'A', clausura: { pts: 17, j: 12, gf: 16, gc: 12 }, anual: { pts: 31, j: 28, gf: 27, gc: 30 } },
-    'Barracas Central': { group: 'A', clausura: { pts: 17, j: 11, gf: 13, gc: 11 }, anual: { pts: 43, j: 27, gf: 33, gc: 29 } },
-    'Tigre': { group: 'A', clausura: { pts: 17, j: 12, gf: 11, gc: 9 }, anual: { pts: 44, j: 28, gf: 29, gc: 21 } },
-    'Huracán': { group: 'A', clausura: { pts: 16, j: 12, gf: 6, gc: 10 }, anual: { pts: 43, j: 28, gf: 25, gc: 22 } },
-    'Argentinos Juniors': { group: 'A', clausura: { pts: 15, j: 12, gf: 13, gc: 9 }, anual: { pts: 48, j: 28, gf: 36, gc: 18 } },
-    'Belgrano': { group: 'A', clausura: { pts: 15, j: 12, gf: 11, gc: 11 }, anual: { pts: 32, j: 28, gf: 24, gc: 32 } },
-    'Racing Club': { group: 'A', clausura: { pts: 15, j: 12, gf: 13, gc: 13 }, anual: { pts: 43, j: 28, gf: 39, gc: 29 } },
-    'Ind. Rivadavia': { group: 'A', clausura: { pts: 12, j: 12, gf: 10, gc: 12 }, anual: { pts: 39, j: 28, gf: 30, gc: 29 } },
-    'Newell\'s': { group: 'A', clausura: { pts: 11, j: 12, gf: 8, gc: 10 }, anual: { pts: 30, j: 28, gf: 22, gc: 33 } },
-    'Aldosivi': { group: 'A', clausura: { pts: 9, j: 12, gf: 5, gc: 14 }, anual: { pts: 24, j: 28, gf: 23, gc: 42 } },
-    'Banfield': { group: 'A', clausura: { pts: 14, j: 12, gf: 10, gc: 17 }, anual: { pts: 28, j: 28, gf: 24, gc: 36 } },
+    'Boca Juniors': { group: 'A', clausura: { pts: 26, j: 15, gf: 26, gc: 12 }, anual: { pts: 59, j: 31, gf: 50, gc: 23 } },
+    'Unión': { group: 'A', clausura: { pts: 24, j: 15, gf: 20, gc: 13 }, anual: { pts: 38, j: 31, gf: 31, gc: 30 } }, // Anual 38 (31+7) -> 38
+    'Central Córdoba (SdE)': { group: 'A', clausura: { pts: 23, j: 15, gf: 16, gc: 10 }, anual: { pts: 41, j: 31, gf: 37, gc: 32 } }, // Anual 41 (36+5) -> 41
+    'Tigre': { group: 'A', clausura: { pts: 22, j: 15, gf: 14, gc: 11 }, anual: { pts: 49, j: 31, gf: 32, gc: 23 } },
+    'Barracas Central': { group: 'A', clausura: { pts: 22, j: 15, gf: 18, gc: 16 }, anual: { pts: 48, j: 31, gf: 38, gc: 34 } },
+    'Racing Club': { group: 'A', clausura: { pts: 22, j: 15, gf: 15, gc: 13 }, anual: { pts: 50, j: 31, gf: 41, gc: 29 } }, // Anual 50 (43+7) -> 50
+    'Argentinos Juniors': { group: 'A', clausura: { pts: 21, j: 15, gf: 16, gc: 12 }, anual: { pts: 54, j: 31, gf: 40, gc: 21 } }, // Anual 54 (48+6) -> 54
+    'Estudiantes (LP)': { group: 'A', clausura: { pts: 21, j: 15, gf: 16, gc: 16 }, anual: { pts: 42, j: 31, gf: 34, gc: 35 } }, // Anual 42 (39+3) -> 42
+    'Banfield': { group: 'A', clausura: { pts: 20, j: 15, gf: 14, gc: 20 }, anual: { pts: 34, j: 31, gf: 28, gc: 39 } }, // Anual 34 (28+6) -> 34
+    'Belgrano': { group: 'A', clausura: { pts: 19, j: 15, gf: 13, gc: 11 }, anual: { pts: 36, j: 31, gf: 26, gc: 34 } }, // Anual 36 (32+4) -> 36
+    'Defensa y Justicia': { group: 'A', clausura: { pts: 19, j: 15, gf: 14, gc: 17 }, anual: { pts: 38, j: 31, gf: 32, gc: 39 } },
+    'Huracán': { group: 'A', clausura: { pts: 19, j: 15, gf: 9, gc: 14 }, anual: { pts: 46, j: 31, gf: 28, gc: 26 } }, // Anual 46 (43+3) -> 46
+    'Aldosivi': { group: 'A', clausura: { pts: 15, j: 15, gf: 9, gc: 16 }, anual: { pts: 30, j: 31, gf: 27, gc: 44 } }, // Anual 30 (24+6) -> 30
+    'Newell\'s': { group: 'A', clausura: { pts: 14, j: 15, gf: 13, gc: 22 }, anual: { pts: 33, j: 31, gf: 25, gc: 37 } }, // Anual 33 (30+3) -> 33
+    'Ind. Rivadavia': { group: 'A', clausura: { pts: 13, j: 15, gf: 12, gc: 17 }, anual: { pts: 40, j: 31, gf: 32, gc: 34 } }, // Anual 40 (39+1) -> 40
 
     // Zona B
-    'Riestra': { group: 'B', clausura: { pts: 23, j: 11, gf: 16, gc: 8 }, anual: { pts: 47, j: 27, gf: 29, gc: 15 } },
-    'Lanús': { group: 'B', clausura: { pts: 23, j: 12, gf: 13, gc: 9 }, anual: { pts: 43, j: 28, gf: 26, gc: 20 } },
-    'Vélez Sarsfield': { group: 'B', clausura: { pts: 22, j: 12, gf: 17, gc: 9 }, anual: { pts: 36, j: 28, gf: 24, gc: 31 } },
-    'Rosario Central': { group: 'B', clausura: { pts: 21, j: 11, gf: 13, gc: 6 }, anual: { pts: 56, j: 27, gf: 35, gc: 14 } },
-    'River Plate': { group: 'B', clausura: { pts: 18, j: 12, gf: 18, gc: 12 }, anual: { pts: 49, j: 28, gf: 39, gc: 21 } },
-    'San Lorenzo': { group: 'B', clausura: { pts: 16, j: 12, gf: 9, gc: 9 }, anual: { pts: 43, j: 28, gf: 23, gc: 19 } },
-    'Atlético Tucumán': { group: 'B', clausura: { pts: 15, j: 12, gf: 13, gc: 13 }, anual: { pts: 30, j: 28, gf: 30, gc: 34 } },
-    'Sarmiento (J)': { group: 'B', clausura: { pts: 15, j: 11, gf: 9, gc: 11 }, anual: { pts: 30, j: 27, gf: 20, gc: 30 } },
-    'Instituto': { group: 'B', clausura: { pts: 15, j: 12, gf: 7, gc: 11 }, anual: { pts: 33, j: 28, gf: 23, gc: 31 } },
-    'San Martín (SJ)': { group: 'B', clausura: { pts: 14, j: 12, gf: 9, gc: 11 }, anual: { pts: 23, j: 28, gf: 14, gc: 29 } },
-    'Talleres (C)': { group: 'B', clausura: { pts: 14, j: 12, gf: 7, gc: 10 }, anual: { pts: 27, j: 28, gf: 18, gc: 25 } },
-    'Gimnasia (LP)': { group: 'B', clausura: { pts: 13, j: 12, gf: 8, gc: 14 }, anual: { pts: 29, j: 28, gf: 17, gc: 32 } },
-    'Platense': { group: 'B', clausura: { pts: 10, j: 10, gf: 10, gc: 15 }, anual: { pts: 33, j: 26, gf: 23, gc: 26 } },
-    'Godoy Cruz': { group: 'B', clausura: { pts: 10, j: 12, gf: 9, gc: 14 }, anual: { pts: 27, j: 28, gf: 17, gc: 32 } },
-    'Independiente': { group: 'B', clausura: { pts: 6, j: 11, gf: 6, gc: 12 }, anual: { pts: 35, j: 27, gf: 29, gc: 24 } }
+    'Rosario Central': { group: 'B', clausura: { pts: 31, j: 15, gf: 18, gc: 7 }, anual: { pts: 66, j: 31, gf: 40, gc: 15 } },
+    'Riestra': { group: 'B', clausura: { pts: 27, j: 15, gf: 18, gc: 11 }, anual: { pts: 51, j: 31, gf: 31, gc: 18 } }, // Anual 51 (47+4) -> 51
+    'Lanús': { group: 'B', clausura: { pts: 27, j: 15, gf: 17, gc: 12 }, anual: { pts: 47, j: 31, gf: 30, gc: 23 } }, // Anual 47 (43+4) -> 47
+    'Vélez Sarsfield': { group: 'B', clausura: { pts: 25, j: 15, gf: 19, gc: 12 }, anual: { pts: 39, j: 31, gf: 26, gc: 34 } }, // Anual 39 (36+3) -> 39
+    'San Lorenzo': { group: 'B', clausura: { pts: 23, j: 15, gf: 12, gc: 10 }, anual: { pts: 50, j: 31, gf: 26, gc: 20 } },
+    'River Plate': { group: 'B', clausura: { pts: 21, j: 15, gf: 20, gc: 15 }, anual: { pts: 52, j: 31, gf: 41, gc: 24 } },
+    'Talleres (C)': { group: 'B', clausura: { pts: 20, j: 15, gf: 9, gc: 12 }, anual: { pts: 33, j: 31, gf: 20, gc: 27 } }, // Anual 33 (27+6) -> 33
+    'San Martín (SJ)': { group: 'B', clausura: { pts: 19, j: 15, gf: 11, gc: 12 }, anual: { pts: 28, j: 31, gf: 16, gc: 30 } }, // Anual 28 (23+5) -> 28
+    'Sarmiento (J)': { group: 'B', clausura: { pts: 19, j: 15, gf: 12, gc: 16 }, anual: { pts: 34, j: 31, gf: 23, gc: 35 } }, // Anual 34 (30+4) -> 34
+    'Gimnasia (LP)': { group: 'B', clausura: { pts: 19, j: 15, gf: 11, gc: 16 }, anual: { pts: 35, j: 31, gf: 20, gc: 34 } }, // Anual 35 (29+6) -> 35
+    'Atlético Tucumán': { group: 'B', clausura: { pts: 18, j: 15, gf: 16, gc: 19 }, anual: { pts: 34, j: 31, gf: 33, gc: 40 } }, // Anual 34 (30+4) -> 34
+    'Independiente': { group: 'B', clausura: { pts: 15, j: 15, gf: 13, gc: 13 }, anual: { pts: 44, j: 31, gf: 36, gc: 25 } }, // Anual 44 (35+9) -> 44
+    'Instituto': { group: 'B', clausura: { pts: 15, j: 15, gf: 9, gc: 17 }, anual: { pts: 33, j: 31, gf: 25, gc: 37 } },
+    'Platense': { group: 'B', clausura: { pts: 12, j: 15, gf: 12, gc: 22 }, anual: { pts: 35, j: 31, gf: 25, gc: 33 } }, // Anual 35 (33+2) -> 35
+    /* Error en G-E-P de Platense, Anual 33+2=35. */
+    'Godoy Cruz': { group: 'B', clausura: { pts: 11, j: 15, gf: 10, gc: 18 }, anual: { pts: 28, j: 31, gf: 18, gc: 36 } }, // Anual 28 (27+1) -> 28
 };
 
-const teamLogos = { 'Boca Juniors': 'https://www.promiedos.com.ar/images/12.png', 'River Plate': 'https://www.promiedos.com.ar/images/1.png', 'Racing Club': 'https://www.promiedos.com.ar/images/15.png', 'Independiente': 'https://www.promiedos.com.ar/images/10.png', 'San Lorenzo': 'https://www.promiedos.com.ar/images/17.png', 'Vélez Sarsfield': 'https://www.promiedos.com.ar/images/2.png', 'Estudiantes (LP)': 'https://www.promiedos.com.ar/images/8.png', 'Rosario Central': 'https://www.promiedos.com.ar/images/16.png', 'Lanús': 'https://www.promiedos.com.ar/images/11.png', 'Huracán': 'https://www.promiedos.com.ar/images/21.png', 'Argentinos Juniors': 'https://www.promiedos.com.ar/images/3.png', 'Tigre': 'https://www.promiedos.com.ar/images/28.png', 'Platense': 'https://www.promiedos.com.ar/images/29.png', 'Defensa y Justicia': 'https://www.promiedos.com.ar/images/107.png', 'Sarmiento (J)': 'https://www.promiedos.com.ar/images/84.png', 'Unión': 'https://www.promiedos.com.ar/images/19.png', 'Central Córdoba (SdE)': 'https://www.promiedos.com.ar/images/207.png', 'Barracas Central': 'https://www.promiedos.com.ar/images/183.png', 'Instituto': 'https://www.promiedos.com.ar/images/23.png', 'Belgrano': 'https://www.promiedos.com.ar/images/22.png', 'Ind. Rivadavia': 'https://www.promiedos.com.ar/images/79.png', 'Riestra': 'https://www.promiedos.com.ar/images/232.png', 'Talleres (C)': 'https://www.promiedos.com.ar/images/25.png', 'San Martín (SJ)': 'https://www.promiedos.com.ar/images/57.png', 'Newell\'s': 'https://www.promiedos.com.ar/images/14.png', 'Aldosivi': 'https://www.promiedos.com.ar/images/99.png', 'Banfield': 'https://www.promiedos.com.ar/images/4.png', 'Atlético Tucumán': 'https://www.promiedos.com.ar/images/33.png', 'Gimnasia (LP)': 'https://www.promiedos.com.ar/images/9.png', 'Godoy Cruz': 'https://www.promiedos.com.ar/images/101.png' };
+const teamLogos = { 
+    'Boca Juniors': 'https://upload.wikimedia.org/wikipedia/commons/c/c9/Boca_escudo.png', 
+    'River Plate': 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Logo_River_Plate.png/500px-Logo_River_Plate.png', 
+    'Racing Club': 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/56/Escudo_de_Racing_Club_%282014%29.svg/247px-Escudo_de_Racing_Club_%282014%29.svg.png', 
+    'Independiente': 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/db/Escudo_del_Club_Atl%C3%A9tico_Independiente.svg/474px-Escudo_del_Club_Atl%C3%A9tico_Independiente.svg.png', 
+    'San Lorenzo': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/62/Escudo_del_Club_Atl%C3%A9tico_San_Lorenzo_de_Almagro.png/960px-Escudo_del_Club_Atl%C3%A9tico_San_Lorenzo_de_Almagro.png', 
+    'Vélez Sarsfield': 'https://upload.wikimedia.org/wikipedia/commons/3/36/Escudo_V%C3%A9lez_Sarsfield.png', 
+    'Estudiantes (LP)': 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/da/Escudo_de_Estudiantes_de_La_Plata.svg/350px-Escudo_de_Estudiantes_de_La_Plata.svg.png', 
+    'Rosario Central': 'https://w7.pngwing.com/pngs/372/1004/png-transparent-rosario-central-superliga-argentina-de-futbol-football-logo-football-emblem-text-plate-thumbnail.png', 
+    'Lanús': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/93/Escudo_de_Lan%C3%BAs.png/960px-Escudo_de_Lan%C3%BAs.png', 
+    'Huracán': 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/dd/Emblema_oficial_del_Club_Atl%C3%A9tico_Hurac%C3%A1n.svg/500px-Emblema_oficial_del_Club_Atl%C3%A9tico_Hurac%C3%A1n.svg.png', 
+    'Argentinos Juniors': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Escudo_de_la_Asociaci%C3%B3n_Atl%C3%A9tica_Argentinos_Juniors.svg/599px-Escudo_de_la_Asociaci%C3%B3n_Atl%C3%A9tica_Argentinos_Juniors.svg.png', 
+    'Tigre': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Escudo_del_Club_Atl%C3%A9tico_Tigre.svg/500px-Escudo_del_Club_Atl%C3%A9tico_Tigre.svg.png', 
+    'Platense': 'https://upload.wikimedia.org/wikipedia/commons/d/d4/Escudo_De_Platense.png', 
+    'Defensa y Justicia': 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/70/Escudo_del_Club_Social_y_Deportivo_Defensa_y_Justicia.svg/250px-Escudo_del_Club_Social_y_Deportivo_Defensa_y_Justicia.svg.png', 
+    'Sarmiento (J)': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/Escudo_del_Club_Atl%C3%A9tico_Sarmiento_de_Jun%C3%ADn.svg/275px-Escudo_del_Club_Atl%C3%A9tico_Sarmiento_de_Jun%C3%ADn.svg.png', 
+    'Unión': 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7c/Escudo_club_Atl%C3%A9tico_Uni%C3%B3n_de_santa_fe.svg/250px-Escudo_club_Atl%C3%A9tico_Uni%C3%B3n_de_santa_fe.svg.png', 
+    'Central Córdoba (SdE)': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6b/Escudo_del_Club_Central_C%C3%B3rdoba_de_Santiago_del_Estero._%281970s_created_logo%29.svg/582px-Escudo_del_Club_Central_C%C3%B3rdoba_de_Santiago_del_Estero._%281970s_created_logo%29.svg.png', 
+    'Barracas Central': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/99/Barracas_central_logo.svg/500px-Barracas_central_logo.svg.png', 
+    'Instituto': 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6d/Escudo_Instituto_Atletico_Central_Cordoba.png/960px-Escudo_Instituto_Atletico_Central_Cordoba.png', 
+    'Belgrano': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Escudo_Oficial_del_Club_Atl%C3%A9tico_Belgrano.png/600px-Escudo_Oficial_del_Club_Atl%C3%A9tico_Belgrano.png', 
+    'Ind. Rivadavia': 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/7f/Escudo_del_Club_Independiente_Rivadavia.svg/596px-Escudo_del_Club_Independiente_Rivadavia.svg.png', 
+    'Riestra': 'https://upload.wikimedia.org/wikipedia/commons/c/c6/Escudo_de_Deportivo_Riestra.png', 
+    'Talleres (C)': 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9b/Escudo_Talleres_2015.svg/595px-Escudo_Talleres_2015.svg.png', 
+    'San Martín (SJ)': 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bd/Escudo_de_San_Martin_de_San_Juan.svg/577px-Escudo_de_San_Martin_de_San_Juan.svg.png', 
+    'Newell\'s': 'https://upload.wikimedia.org/wikipedia/commons/b/b0/Newell%27s_Old_Boys_Escudo.png', 
+    'Aldosivi': 'https://upload.wikimedia.org/wikipedia/en/thumb/2/2a/Aldosivi_logo.svg/250px-Aldosivi_logo.svg.png', 
+    'Banfield': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/16/CA_Banfield_%282014%29.svg/733px-CA_Banfield_%282014%29.svg.png', 
+    'Atlético Tucumán': 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/b4/Escudo_del_Club_Atletico_Tucuman.svg/511px-Escudo_del_Club_Atletico_Tucuman.svg.png', 
+    'Gimnasia (LP)': 'https://w7.pngwing.com/pngs/650/306/png-transparent-club-de-gimnasia-y-esgrima-la-plata-polideportivo-gimnasia-y-esgrima-la-plata-logo-graphic-design-design-emblem-logo-area-thumbnail.png', 
+    'Godoy Cruz': 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Escudo_del_Club_Deportivo_Godoy_Cruz_Antonio_Tomba.svg/600px-Escudo_del_Club_Deportivo_Godoy_Cruz_Antonio_Tomba.svg.png' 
+};
 
+// Solo queda la Fecha 16
 let initialRemainingMatches = [
-    // Fecha 12 (Pendiente)
-    { fecha: 12, local: 'Barracas Central', visitante: 'Boca Juniors', status: 'Aplazado' },
-    { fecha: 12, local: 'Platense', visitante: 'Riestra', status: 'Aplazado' },
-    // Fecha 13
-    { fecha: 13, local: 'Racing Club', visitante: 'Aldosivi' },
-    { fecha: 13, local: 'Lanús', visitante: 'Godoy Cruz' },
-    { fecha: 13, local: 'Argentinos Juniors', visitante: 'Newell\'s' },
-    { fecha: 13, local: 'Ind. Rivadavia', visitante: 'Banfield' },
-    { fecha: 13, local: 'Boca Juniors', visitante: 'Belgrano' },
-    { fecha: 13, local: 'Talleres (C)', visitante: 'River Plate' },
-    { fecha: 13, local: 'Estudiantes (LP)', visitante: 'Gimnasia (LP)' },
-    { fecha: 13, local: 'Sarmiento (J)', visitante: 'Vélez Sarsfield' },
-    { fecha: 13, local: 'San Martín (SJ)', visitante: 'Independiente' },
-    { fecha: 13, local: 'Rosario Central', visitante: 'Platense' },
-    { fecha: 13, local: 'Riestra', visitante: 'Instituto' },
-    { fecha: 13, local: 'Tigre', visitante: 'Barracas Central' },
-    { fecha: 13, local: 'Atlético Tucumán', visitante: 'San Lorenzo' },
-    { fecha: 13, local: 'Unión', visitante: 'Defensa y Justicia' },
-    { fecha: 13, local: 'Huracán', visitante: 'Central Córdoba (SdE)' },
-    // Fecha 14
-    { fecha: 14, local: 'Banfield', visitante: 'Lanús' },
-    { fecha: 14, local: 'Vélez Sarsfield', visitante: 'Talleres (C)' },
-    { fecha: 14, local: 'River Plate', visitante: 'Gimnasia (LP)' },
-    { fecha: 14, local: 'Platense', visitante: 'Sarmiento (J)' },
-    { fecha: 14, local: 'Instituto', visitante: 'Rosario Central' },
-    { fecha: 14, local: 'San Lorenzo', visitante: 'Riestra' },
-    { fecha: 14, local: 'Independiente', visitante: 'Atlético Tucumán' },
-    { fecha: 14, local: 'Godoy Cruz', visitante: 'San Martín (SJ)' },
-    { fecha: 14, local: 'Estudiantes (LP)', visitante: 'Boca Juniors' },
-    { fecha: 14, local: 'Belgrano', visitante: 'Tigre' },
-    { fecha: 14, local: 'Barracas Central', visitante: 'Argentinos Juniors' },
-    { fecha: 14, local: 'Newell\'s', visitante: 'Unión' },
-    { fecha: 14, local: 'Defensa y Justicia', visitante: 'Huracán' },
-    { fecha: 14, local: 'Central Córdoba (SdE)', visitante: 'Racing Club' },
-    { fecha: 14, local: 'Aldosivi', visitante: 'Ind. Rivadavia' },
-    // Fecha 15
-    { fecha: 15, local: 'Boca Juniors', visitante: 'River Plate' },
-    { fecha: 15, local: 'Atlético Tucumán', visitante: 'Godoy Cruz' },
-    { fecha: 15, local: 'San Martín (SJ)', visitante: 'Lanús' },
-    { fecha: 15, local: 'Rosario Central', visitante: 'San Lorenzo' },
-    { fecha: 15, local: 'Riestra', visitante: 'Independiente' },
-    { fecha: 15, local: 'Sarmiento (J)', visitante: 'Instituto' },
-    { fecha: 15, local: 'Talleres (C)', visitante: 'Platense' },
-    { fecha: 15, local: 'Gimnasia (LP)', visitante: 'Vélez Sarsfield' },
-    { fecha: 15, local: 'Banfield', visitante: 'Aldosivi' },
-    { fecha: 15, local: 'Ind. Rivadavia', visitante: 'Central Córdoba (SdE)' },
-    { fecha: 15, local: 'Huracán', visitante: 'Newell\'s' },
-    { fecha: 15, local: 'Racing Club', visitante: 'Defensa y Justicia' },
-    { fecha: 15, local: 'Unión', visitante: 'Barracas Central' },
-    { fecha: 15, local: 'Argentinos Juniors', visitante: 'Belgrano' },
-    { fecha: 15, local: 'Tigre', visitante: 'Estudiantes (LP)' },
-    // Fecha 16
     { fecha: 16, local: 'Vélez Sarsfield', visitante: 'River Plate' },
     { fecha: 16, local: 'Platense', visitante: 'Gimnasia (LP)' },
     { fecha: 16, local: 'San Lorenzo', visitante: 'Sarmiento (J)' },
@@ -373,6 +354,24 @@ let initialRemainingMatches = [
 let matchResults = {};
 
 document.addEventListener('DOMContentLoaded', () => {
+    // Eliminar equipos que no están en las nuevas tablas
+    const equiposEnNuevasTablas = {
+        ...initialTeamsData
+    };
+    
+    // Filtrar equipos que ya no existen en los datos nuevos
+    Object.keys(initialTeamsData).forEach(teamName => {
+        if (!equiposEnNuevasTablas[teamName]) {
+            delete initialTeamsData[teamName];
+        }
+    });
+
+    // Filtrar partidos restantes si algún equipo ya no existe
+    initialRemainingMatches = initialRemainingMatches.filter(match => {
+        return initialTeamsData[match.local] && initialTeamsData[match.visitante];
+    });
+
+
     renderMatches();
     renderTables();
 });
@@ -383,21 +382,25 @@ function renderTables() {
     for (const matchId in matchResults) {
         const match = matchResults[matchId];
         if (match.localScore === null || match.visitorScore === null) continue;
-        const local = currentData[match.local];
-        const visitor = currentData[match.visitante];
-        local.clausura.j++; visitor.clausura.j++;
-        local.anual.j++; visitor.anual.j++;
-        local.clausura.gf += match.localScore; visitor.clausura.gf += match.visitorScore;
-        local.clausura.gc += match.visitorScore; visitor.clausura.gc += match.localScore;
-        local.anual.gf += match.localScore; visitor.anual.gf += match.visitorScore;
-        local.anual.gc += match.visitorScore; visitor.anual.gc += match.localScore;
-        if (match.localScore > match.visitorScore) {
-            local.clausura.pts += 3; local.anual.pts += 3;
-        } else if (match.visitorScore > match.localScore) {
-            visitor.clausura.pts += 3; visitor.anual.pts += 3;
-        } else {
-            local.clausura.pts += 1; visitor.clausura.pts += 1;
-            local.anual.pts += 1; visitor.anual.pts += 1;
+
+        // Asegurarse que los equipos existen antes de actualizar
+        if (currentData[match.local] && currentData[match.visitante]) {
+            const local = currentData[match.local];
+            const visitor = currentData[match.visitante];
+            local.clausura.j++; visitor.clausura.j++;
+            local.anual.j++; visitor.anual.j++;
+            local.clausura.gf += match.localScore; visitor.clausura.gf += match.visitorScore;
+            local.clausura.gc += match.visitorScore; visitor.clausura.gc += match.localScore;
+            local.anual.gf += match.localScore; visitor.anual.gf += match.visitorScore;
+            local.anual.gc += match.visitorScore; visitor.anual.gc += match.localScore;
+            if (match.localScore > match.visitorScore) {
+                local.clausura.pts += 3; local.anual.pts += 3;
+            } else if (match.visitorScore > match.localScore) {
+                visitor.clausura.pts += 3; visitor.anual.pts += 3;
+            } else {
+                local.clausura.pts += 1; visitor.clausura.pts += 1;
+                local.anual.pts += 1; visitor.anual.pts += 1;
+            }
         }
     }
 
@@ -447,6 +450,8 @@ function renderTables() {
         </tr>`).join('');
 
     renderPlayoffs(sortedA, sortedB);
+    // Añadimos el event listener después de renderizar el bracket
+    addBracketListeners();
 }
 
 function renderPlayoffs(sortedA, sortedB) {
@@ -456,10 +461,10 @@ function renderPlayoffs(sortedA, sortedB) {
             <!-- OCTAVOS -->
             <div class="round">
                 <div class="round-title">8vos de Final</div>
-                ${generateMatchupHTML(sortedA[0], sortedB[7], '1°A', '8°B')}
-                ${generateMatchupHTML(sortedA[3], sortedB[4], '4°A', '5°B')}
-                ${generateMatchupHTML(sortedA[1], sortedB[6], '2°A', '7°B')}
-                ${generateMatchupHTML(sortedA[2], sortedB[5], '3°A', '6°B')}
+                ${generateMatchupHTML(sortedA[0], sortedB[7], '1°A', '8°B', 'r16-1')}
+                ${generateMatchupHTML(sortedA[3], sortedB[4], '4°A', '5°B', 'r16-2')}
+                ${generateMatchupHTML(sortedA[1], sortedB[6], '2°A', '7°B', 'r16-3')}
+                ${generateMatchupHTML(sortedA[2], sortedB[5], '3°A', '6°B', 'r16-4')}
             </div>
             <!-- CONECTORES Y CUARTOS -->
             <div class="connector left">
@@ -468,8 +473,8 @@ function renderPlayoffs(sortedA, sortedB) {
             </div>
             <div class="round">
                 <div class="round-title">4tos de Final</div>
-                <div class="matchup"><div class="placeholder-match">A definir</div></div>
-                <div class="matchup"><div class="placeholder-match">A definir</div></div>
+                ${generateMatchupHTML(null, null, null, null, 'r8-1')}
+                ${generateMatchupHTML(null, null, null, null, 'r8-2')}
             </div>
             <!-- CONECTORES Y SEMIS -->
             <div class="connector left">
@@ -477,7 +482,7 @@ function renderPlayoffs(sortedA, sortedB) {
             </div>
             <div class="round">
                 <div class="round-title">Semifinales</div>
-                <div class="matchup"><div class="placeholder-match">A definir</div></div>
+                ${generateMatchupHTML(null, null, null, null, 'r4-1')}
             </div>
             <!-- FINAL -->
             <div class="connector">
@@ -485,7 +490,7 @@ function renderPlayoffs(sortedA, sortedB) {
             </div>
             <div class="round">
                  <div class="round-title">Final</div>
-                <div class="matchup"><div class="placeholder-match">A definir</div></div>
+                ${generateMatchupHTML(null, null, null, null, 'r2-1')}
             </div>
             <div class="connector">
                 <div class="connector-line connector-1-to-1"></div>
@@ -493,7 +498,7 @@ function renderPlayoffs(sortedA, sortedB) {
             <!-- CONECTORES Y SEMIS -->
              <div class="round">
                 <div class="round-title">Semifinales</div>
-                <div class="matchup"><div class="placeholder-match">A definir</div></div>
+                ${generateMatchupHTML(null, null, null, null, 'r4-2')}
             </div>
             <div class="connector right">
                 <div class="connector-line connector-2-to-1"></div>
@@ -501,8 +506,8 @@ function renderPlayoffs(sortedA, sortedB) {
             <!-- CUARTOS -->
             <div class="round">
                 <div class="round-title">4tos de Final</div>
-                <div class="matchup"><div class="placeholder-match">A definir</div></div>
-                <div class="matchup"><div class="placeholder-match">A definir</div></div>
+                ${generateMatchupHTML(null, null, null, null, 'r8-3')}
+                ${generateMatchupHTML(null, null, null, null, 'r8-4')}
             </div>
             <!-- CONECTORES Y OCTAVOS -->
             <div class="connector right">
@@ -511,29 +516,51 @@ function renderPlayoffs(sortedA, sortedB) {
             </div>
             <div class="round">
                 <div class="round-title">8vos de Final</div>
-                ${generateMatchupHTML(sortedB[0], sortedA[7], '1°B', '8°A')}
-                ${generateMatchupHTML(sortedB[3], sortedA[4], '4°B', '5°A')}
-                ${generateMatchupHTML(sortedB[1], sortedA[6], '2°B', '7°A')}
-                ${generateMatchupHTML(sortedB[2], sortedA[5], '3°B', '6°A')}
+                ${generateMatchupHTML(sortedB[0], sortedA[7], '1°B', '8°A', 'r16-5')}
+                ${generateMatchupHTML(sortedB[3], sortedA[4], '4°B', '5°A', 'r16-6')}
+                ${generateMatchupHTML(sortedB[1], sortedA[6], '2°B', '7°A', 'r16-7')}
+                ${generateMatchupHTML(sortedB[2], sortedA[5], '3°B', '6°A', 'r16-8')}
             </div>
         </div>
     `;
     playoffsContainer.innerHTML = bracketHTML;
 }
 
-function generateMatchupHTML(team1, team2, pos1, pos2) {
+function generateMatchupHTML(team1, team2, pos1, pos2, matchId) {
+    // Si no hay team1, es un placeholder para una ronda futura
+    if (!team1) {
+        return `
+        <div class="matchup">
+            <div class="match-item" id="${matchId}" data-match-id="${matchId}"> 
+                <div class="team" data-team-name="A definir">
+                    <img src="" class="team-logo">
+                    <span>A definir</span>
+                    <span class="team-pos"></span>
+                </div>
+                <hr class="my-1 border-slate-200">
+                <div class="team" data-team-name="A definir">
+                    <img src="" class="team-logo">
+                    <span>A definir</span>
+                    <span class="team-pos"></span>
+                </div>
+            </div>
+        </div>
+        `;
+    }
+
+    // Es un partido de octavos con equipos definidos
     const t1 = team1 || { name: 'A definir' };
     const t2 = team2 || { name: 'A definir' };
     return `
         <div class="matchup">
-            <div class="match-item">
-                <div class="team">
+            <div class="match-item" data-match-id="${matchId}">
+                <div class="team" onclick="handleTeamClick(this)" data-team-name="${t1.name}" data-team-logo="${teamLogos[t1.name] || ''}">
                     <img src="${teamLogos[t1.name] || ''}" class="team-logo">
                     <span>${t1.name}</span>
                     <span class="team-pos">${pos1 || ''}</span>
                 </div>
                 <hr class="my-1 border-slate-200">
-                <div class="team">
+                <div class="team" onclick="handleTeamClick(this)" data-team-name="${t2.name}" data-team-logo="${teamLogos[t2.name] || ''}">
                     <img src="${teamLogos[t2.name] || ''}" class="team-logo">
                     <span>${t2.name}</span>
                     <span class="team-pos">${pos2 || ''}</span>
@@ -609,7 +636,127 @@ function resetResults() {
     // Re-render the tables to show the initial state
     renderTables();
 }
+
+// --- NUEVA FUNCIONALIDAD DE CLIC EN BRACKET ---
+
+// Mapa de lógica del bracket: qué partido alimenta qué slot
+const bracketLogic = {
+    'r16-1': { target: 'r8-1', slot: 1 }, // slot 1 = top
+    'r16-2': { target: 'r8-1', slot: 2 }, // slot 2 = bottom
+    'r16-3': { target: 'r8-2', slot: 1 },
+    'r16-4': { target: 'r8-2', slot: 2 },
+    'r16-5': { target: 'r8-3', slot: 1 },
+    'r16-6': { target: 'r8-3', slot: 2 },
+    'r16-7': { target: 'r8-4', slot: 1 },
+    'r16-8': { target: 'r8-4', slot: 2 },
+    
+    'r8-1': { target: 'r4-1', slot: 1 },
+    'r8-2': { target: 'r4-1', slot: 2 },
+    'r8-3': { target: 'r4-2', slot: 1 },
+    'r8-4': { target: 'r4-2', slot: 2 },
+
+    'r4-1': { target: 'r2-1', slot: 1 },
+    'r4-2': { target: 'r2-1', slot: 2 }
+};
+
+// Esta función se llama cada vez que se renderizan las tablas
+function addBracketListeners() {
+    const matchups = document.querySelectorAll('.match-item[data-match-id]');
+    
+    matchups.forEach(match => {
+        const matchId = match.dataset.matchId;
+        const logic = bracketLogic[matchId];
+
+        const teams = match.querySelectorAll('.team');
+        teams.forEach((team) => {
+            // Asegurarse de no agregar listeners duplicados
+            if (!team.hasClickListener) {
+                team.style.cursor = 'pointer'; // Hacer que parezca clickeable
+                team.hasClickListener = true; // Marcar que ya tiene listener
+                
+                team.onclick = () => {
+                    const teamName = team.dataset.teamName;
+                    const teamHTML = team.innerHTML; // <--- CAMBIO: Obtener HTML
+                    
+                    if (!teamName || teamName === 'A definir') return;
+                    
+                    // Resaltar selección
+                    teams.forEach(t => {
+                        t.style.opacity = '0.5'; // Apagar ambos
+                        t.style.fontWeight = 'normal';
+                    });
+                    team.style.opacity = '1'; // Encender el seleccionado
+                    team.style.fontWeight = 'bold';
+
+                    // Avanzar el equipo al siguiente slot (si tiene lógica)
+                    if(logic) {
+                        advanceTeam(logic.target, logic.slot, teamHTML, teamName, matchId); // <--- CAMBIO: Pasar HTML
+                    }
+                };
+            }
+        });
+    });
+}
+
+// Función que avanza el equipo al siguiente slot
+function advanceTeam(targetMatchId, targetSlot, teamHTML, teamName, sourceMatchId) { // <--- CAMBIO: Recibir HTML
+    const targetMatchElement = document.getElementById(targetMatchId);
+    if (!targetMatchElement) return;
+
+    // Encontrar el slot (div.team) específico (1 = top, 2 = bottom)
+    const targetSlotElement = targetMatchElement.querySelectorAll('.team')[targetSlot - 1];
+    
+    if (targetSlotElement) {
+        // Si el slot ya tiene un equipo de un partido DIFERENTE, no lo borres
+        // (esto previene que r16-2 borre lo que puso r16-1)
+        const currentSource = targetSlotElement.dataset.sourceMatch;
+        if (currentSource && currentSource !== sourceMatchId) {
+             // Ya hay un ganador de otro partido, no hacer nada
+        } else {
+            // Actualizar el slot con el nuevo equipo
+            targetSlotElement.innerHTML = teamHTML; // <--- CAMBIO: Insertar HTML
+            targetSlotElement.dataset.teamName = teamName;
+        }
+
+        // Limpiar el slot opuesto si el ganador viene del mismo partido
+        const otherSlot = targetSlotElement.parentElement.querySelectorAll('.team')[targetSlot === 1 ? 1 : 0];
+        if (otherSlot && otherSlot.dataset.sourceMatch === sourceMatchId) {
+             otherSlot.innerHTML = '<img src="" class="team-logo"><span>A definir</span><span class="team-pos"></span>'; // <--- CAMBIO: Resetear HTML
+             otherSlot.dataset.teamName = 'A definir';
+        }
+        
+        targetSlotElement.dataset.sourceMatch = sourceMatchId;
+
+        // Limpiar las selecciones de la *siguiente* ronda si este partido cambia
+        clearNextRounds(targetMatchId);
+    }
+    
+    // Volver a agregar listeners para la siguiente ronda (ej. Cuartos)
+    addBracketListeners();
+}
+
+// Función para limpiar rondas futuras si se cambia un ganador
+function clearNextRounds(changedMatchId) {
+    let currentTarget = changedMatchId;
+    while (bracketLogic[currentTarget]) {
+        const nextTargetId = bracketLogic[currentTarget].target;
+        const nextMatchElement = document.getElementById(nextTargetId);
+        
+        if (nextMatchElement) {
+            // Resetear los slots de ese partido
+            nextMatchElement.querySelectorAll('.team').forEach(teamSlot => {
+                teamSlot.innerHTML = '<img src="" class="team-logo"><span>A definir</span><span class="team-pos"></span>'; // <--- CAMBIO: Resetear HTML
+                teamSlot.dataset.teamName = 'A definir';
+                teamSlot.dataset.sourceMatch = '';
+                teamSlot.style.opacity = '1';
+                teamSlot.style.fontWeight = 'normal';
+            });
+        }
+        currentTarget = nextTargetId;
+    }
+}
+
+
 </script>
 </body>
 </html>
-
