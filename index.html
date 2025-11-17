@@ -49,11 +49,9 @@
         input:checked + .slider:before { transform: translateX(20px); }
 
         /* Estilos del Bracket de Playoffs */
-        .bracket-viewport {
-            width: 100%;
-            overflow-x: hidden;      /* sin barrita horizontal */
-            display: flex;
-            justify-content: center; /* centra el contenido */
+        .playoff-wrapper {
+          width: 100%;
+          overflow-x: auto;
         }
         .bracket {
             display: flex;
@@ -62,7 +60,15 @@
             background-color: #e2e8f0; /* Fondo gris claro para el bracket */
             border-radius: 0.5rem;
             direction: ltr;          /* asegura orden izq→der */
-            transform-origin: top center;
+        }
+        .playoff-bracket {
+          min-width: 700px;
+        }
+
+        @media (max-width: 768px) {
+          .playoff-bracket {
+            font-size: 12px;
+          }
         }
         .round {
             display: flex;
@@ -157,6 +163,46 @@
         .connector-1-to-1::before {
              width: 100%;
         }
+
+        /* --- INICIO: ESTILOS VERSIÓN MÓVIL --- */
+        /* Fuerza una sola columna en el layout principal */
+        body.mobile-version .xl\:grid-cols-3 {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+        /* Fuerza una sola columna en las tablas de zona */
+        body.mobile-version .lg\:grid-cols-2 {
+            grid-template-columns: repeat(1, minmax(0, 1fr));
+        }
+        /* Desactiva el "sticky" del fixture */
+        body.mobile-version .xl\:sticky {
+            position: static;
+        }
+        /* Ajusta paddings generales */
+        body.mobile-version .p-8 { padding: 1rem; }
+        body.mobile-version .p-6 { padding: 1rem; }
+        body.mobile-version .p-4 { padding: 0.75rem; }
+        body.mobile-version .p-3 { padding: 0.5rem; }
+        body.mobile-version .p-2 { padding: 0.5rem; }
+        
+        /* Ajusta gaps y márgenes */
+        body.mobile-version .gap-6 { gap: 1rem; }
+        body.mobile-version .gap-8 { gap: 1rem; }
+        body.mobile-version .mb-8 { margin-bottom: 1.5rem; }
+        body.mobile-version .mb-6 { margin-bottom: 1.5rem; }
+        
+        /* Ajusta tamaños de fuente */
+        body.mobile-version .text-4xl { font-size: 1.875rem; }
+        body.mobile-version .text-3xl { font-size: 1.5rem; }
+        body.mobile-version .text-2xl { font-size: 1.25rem; }
+        body.mobile-version .text-xl { font-size: 1.125rem; }
+        body.mobile-version .text-lg { font-size: 1rem; }
+        
+        /* Fuerza los controles a apilarse verticalmente */
+        body.mobile-version .sm\:flex-row { 
+            flex-direction: column; 
+        }
+        /* --- FIN: ESTILOS VERSIÓN MÓVIL --- */
+
     </style>
 </head>
 <body class="p-2 sm:p-4 md:p-6">
@@ -165,6 +211,10 @@
         <header class="text-center mb-6 md:mb-8">
             <h1 class="text-2xl sm:text-3xl md:text-4xl font-bold text-slate-800">Simulador de Playoffs - Liga Profesional</h1>
             <p class="text-sm sm:text-base text-slate-600 mt-2">Ingresa los resultados y mira cómo se actualizan las tablas y cruces.</p>
+            <!-- BOTÓN PARA VERSIÓN MÓVIL AÑADIDO -->
+            <button id="mobile-toggle-btn" onclick="toggleMobileView()" class="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg shadow-md transition-colors">
+                Versión móvil
+            </button>
         </header>
 
         <div class="grid grid-cols-1 xl:grid-cols-3 gap-6 md:gap-8">
@@ -470,8 +520,8 @@ function renderTables() {
 function renderPlayoffs(sortedA, sortedB) {
     const playoffsContainer = document.getElementById('playoffs-container');
     const bracketHTML = `
-        <div class="bracket-viewport"> 
-            <div class="bracket">
+        <div class="playoff-wrapper"> 
+            <div class="bracket playoff-bracket">
                 <!-- OCTAVOS -->
                 <div class="round">
                     <div class="round-title">8vos de Final</div>
@@ -659,6 +709,9 @@ function fitBracket(){
   const el = vp.querySelector('.bracket');
   if (!el) return;
 
+  // Resetear la escala para medir correctamente
+  el.style.transform = 'scale(1)';
+  
   const scale = Math.min(1, vp.clientWidth / el.scrollWidth);
   el.style.transform = `scale(${scale})`;
 }
@@ -696,7 +749,7 @@ function addBracketListeners() {
         const teams = match.querySelectorAll('.team');
         teams.forEach((team) => {
             // Asegurarse de no agregar listeners duplicados
-            if (!team.hasClickListener) {
+            // if (!team.hasClickListener) { // Se quita para re-asignar en cada render
                 team.style.cursor = 'pointer'; // Hacer que parezca clickeable
                 team.hasClickListener = true; // Marcar que ya tiene listener
                 
@@ -719,7 +772,7 @@ function addBracketListeners() {
                         advanceTeam(logic.target, logic.slot, teamHTML, teamName, matchId); // <--- CAMBIO: Pasar HTML
                     }
                 };
-            }
+            // }
         });
     });
 }
